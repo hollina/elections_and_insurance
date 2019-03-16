@@ -4,11 +4,11 @@ This repository contains code and data to replicate the results of:
 
 Hollingsworth, A., Soni, A., Carroll, A., Cawley, J., & Simon, K. (2019). Gains in health insurance coverage explain variation in Democratic vote share in the 2008-2016 presidential elections. PLOS ONE. Forthcoming. 
 
-You can cite this replication package  using the zenodo provided **DOI:** <TBD>. Where an
- archival version of this repository is stored. 
+You can cite this replication package using the zenodo, where an archival version of this repository is stored. 
+ [![DOI](https://zenodo.org/badge/175915806.svg)](https://zenodo.org/badge/latestdoi/175915806)
 
 <figure style="float:center;">
-<img src="https://github.com/hollina/elections_and_insurance/blob/master/Figures/figure_2_change_in_ins_v_change_in_dem_vote_share.png"  width="900"  /> 
+<img src="https://github.com/hollina/elections_and_insurance/blob/master/Figures/figure_2_change_in_ins_v_change_in_dem_vote_share.png"  width="800"  /> 
 </figure>
 
 
