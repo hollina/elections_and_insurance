@@ -115,5 +115,6 @@ twoway scatter change_share_dem change_ins if year ==2016 & expansion == 0 [awei
 	*"by population.")
 	
  	graph export "$figure_results_path/figure_2_change_in_ins_v_change_in_dem_vote_share.pdf", replace
+ 	graph export "$figure_results_path/figure_2_change_in_ins_v_change_in_dem_vote_share.png", replace
 
 log close

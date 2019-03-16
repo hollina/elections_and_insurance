@@ -8,7 +8,7 @@ This repository contains code and data to replicate the results of our paper.
  archival version of this repository is stored. 
 
 <figure style="float:left;">
-<img src="https://github.com/hollina/elections_and_insurance/blob/master/Figures/figure_2_change_in_ins_v_change_in_dem_vote_share.pdf"  width="600"  /> 
+<img src="https://github.com/hollina/elections_and_insurance/blob/master/Figures/figure_2_change_in_ins_v_change_in_dem_vote_share.png"  width="600"  /> 
 </figure>
 
 
