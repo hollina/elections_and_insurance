@@ -3,18 +3,22 @@
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 // Replication code for: 
-// 	Gains in health insurance coverage explain variation 
-// 		in Democratic vote share in the 2008-2016 presidential elections
 
-// By: Hollingsworth (hollinal@indiana.edu), Soni, Carroll, Cawley, and Simon 
+// Hollingsworth, A., Soni, A., Carroll, A., Cawley, J., & Simon, K. (2019). 
+//	 Gains in health insurance coverage explain variation in Democratic 
+//	 vote share in the 2008-2016 presidential elections. PLOS ONE. Forthcoming.
 
-// Citation: Insert citation here. TBD
-// Paper DOI: TBD
+// Email: hollinal@indiana.edu
 
-// To cite this code or data please use the Zenodo DOI below.
-// Code/Repository DOI: 
+// Version: v0.9.0 
 
-// Version: MARCH 2019
+// Date: 15 March 2019
+
+// To cite this code or data please use the Zenodo DOI.
+// 	https://doi.org/10.5281/zenodo.2595616
+// 	Zenodo stores archival versions of this project. 
+
+// Code is also available at https://github.com/hollina/elections_and_insurance
 
 // File: master.do
 
