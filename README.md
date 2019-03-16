@@ -44,6 +44,6 @@ Data on **county land area** come from the 2000 U.S. census.  This along with **
 All analysis were done on unix machines using Stata SE 14.2. We use a number of user-written packages that should be outlined in the master.do file. We also use a number of shell commands from within stata (whenever the ! command is present). Most of these should still work on a non-unix system, but may need to be modified.
 
 ## License:
-Replication Package (this github repo): [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT
+Replication Package (this github repo): [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Paper: [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/
+Paper: [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
