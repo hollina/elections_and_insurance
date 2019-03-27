@@ -1,0 +1,2241 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis1_panel_full.log
+  log type:  text
+ opened on:  23 Mar 2019, 12:27:59
+r; t=0.00 12:27:59
+
+. di "The file is: `tag'"
+The file is:  analysis1_panel_full.do AlexHollingsworth 23-Mar-2019
+r; t=0.00 12:27:59
+
+. di "Task: `task' "
+Task: Analysis for 2008-16 county X year panel data 
+r; t=0.00 12:27:59
+
+. di "Project: `project' "
+Project: ElectionACA 
+r; t=0.00 12:27:59
+
+. 
+. 
+. /* OPEN DATASET */
+. use "$data_path/election_panel_2008_2016", clear
+r; t=0.00 12:27:59
+
+. tab year,m 
+
+       year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2004 |      3,154       25.19       25.19
+       2008 |      3,112       24.85       50.04
+       2012 |      3,112       24.85       74.89
+       2016 |      3,111       24.84       99.73
+          . |         34        0.27      100.00
+------------+-----------------------------------
+      Total |     12,523      100.00
+r; t=0.00 12:27:59
+
+.         
+. 
+. /* TABLE 1 AND 2. MEANS */
+. eststo clear
+r; t=0.00 12:27:59
+
+. estpost tabstat voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 $controls [weight=pop_total] if year>=2008, by(year) nototal statistics(mean) columns(statistics)
+(analytic weights assumed)
+
+Summary statistics: mean
+     for variables: voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 unemp_rate_cty percent_in_poverty perc_black perc_native perc_asian perc_hisp median_income dem_campaign_spending_gap total_campaign_spending pop_den_100k
+  by categories of: year
+
+        year |   e(mean) 
+-------------+-----------
+2008         |           
+voteshare_~m |   52.9542 
+voteshare_~p |  45.71524 
+voteshare_~h |  1.384583 
+     turnout |  43.23546 
+  pctic_0400 |  71.86198 
+unemp_rate~y |   5.86641 
+percent_in~y |  13.24996 
+  perc_black |  13.52093 
+ perc_native |  1.274626 
+  perc_asian |  5.315332 
+   perc_hisp |  15.74225 
+median_inc~e |  5.431743 
+dem_campai~p |  12.36215 
+total_camp~g |  46.73996 
+pop_den_100k |  1.565409 
+-------------+-----------
+2012         |           
+voteshare_~m |  51.11253 
+voteshare_~p |  47.28736 
+voteshare_~h |  1.600116 
+     turnout |  39.24196 
+  pctic_0400 |  70.85264 
+unemp_rate~y |  8.176261 
+percent_in~y |  15.97373 
+  perc_black |  13.79506 
+ perc_native |   1.36291 
+  perc_asian |   5.81317 
+   perc_hisp |  16.91559 
+median_inc~e |  5.345106 
+dem_campai~p |   13.3821 
+total_camp~g |  41.86472 
+pop_den_100k |  1.636599 
+-------------+-----------
+2016         |           
+voteshare_~m |  48.91748 
+voteshare_~p |  46.12882 
+voteshare_~h |  4.953699 
+     turnout |  40.25968 
+  pctic_0400 |  82.58477 
+unemp_rate~y |  4.945761 
+percent_in~y |  14.08718 
+  perc_black |   14.0496 
+ perc_native |  1.391708 
+  perc_asian |  6.388527 
+   perc_hisp |  17.87896 
+median_inc~e |  6.036228 
+dem_campai~p |  1.427609 
+total_camp~g |  47.55288 
+pop_den_100k |  1.689312 
+r; t=0.11 12:27:59
+
+.         esttab using "$table_results_path/analysis_panel_full.rtf", replace ///
+>         main(mean)  nostar unstack nonote compress label noobs ///
+>         title("Means for All Counties, By Year") nonumber 
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=0.15 12:27:59
+
+.         
+. eststo clear
+r; t=0.00 12:27:59
+
+. estpost tabstat voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 $controls if expansion==1&year>=2008 [weight=pop_total], by(year) nototal statistics(mean) columns(statistics)
+(analytic weights assumed)
+
+Summary statistics: mean
+     for variables: voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 unemp_rate_cty percent_in_poverty perc_black perc_native perc_asian perc_hisp median_income dem_campaign_spending_gap total_campaign_spending pop_den_100k
+  by categories of: year
+
+        year |   e(mean) 
+-------------+-----------
+2008         |           
+voteshare_~m |   56.8245 
+voteshare_~p |  41.54658 
+voteshare_~h |   1.58324 
+     turnout |  43.69335 
+  pctic_0400 |  73.93385 
+unemp_rate~y |  6.083571 
+percent_in~y |  12.70684 
+  perc_black |  11.51203 
+ perc_native |   1.31413 
+  perc_asian |  6.775316 
+   perc_hisp |  15.99184 
+median_inc~e |  5.691717 
+dem_campai~p |  19.99598 
+total_camp~g |   63.1428 
+pop_den_100k |  2.095234 
+-------------+-----------
+2012         |           
+voteshare_~m |  55.13916 
+voteshare_~p |  43.07005 
+voteshare_~h |  1.790782 
+     turnout |  38.65916 
+  pctic_0400 |  73.12869 
+unemp_rate~y |  8.538583 
+percent_in~y |  15.33267 
+  perc_black |  11.73198 
+ perc_native |  1.414504 
+  perc_asian |  7.373719 
+   perc_hisp |   17.1249 
+median_inc~e |  5.602356 
+dem_campai~p |   23.2529 
+total_camp~g |  60.11185 
+pop_den_100k |  2.186563 
+-------------+-----------
+2016         |           
+voteshare_~m |  52.60458 
+voteshare_~p |  42.24356 
+voteshare_~h |   5.15186 
+     turnout |  40.04713 
+  pctic_0400 |  86.37537 
+unemp_rate~y |  5.052835 
+percent_in~y |  13.63009 
+  perc_black |  11.93556 
+ perc_native |  1.454233 
+  perc_asian |  8.067595 
+   perc_hisp |  18.01363 
+median_inc~e |  6.348063 
+dem_campai~p |  14.62633 
+total_camp~g |  50.19534 
+pop_den_100k |  2.251606 
+r; t=0.08 12:27:59
+
+.         esttab using "$table_results_path//analysis_panel_full.rtf", append ///
+>         main(mean)  nostar unstack  compress label noobs ///
+>         title("Means for Expansion Counties, By Year") nonumber 
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+r; t=0.15 12:28:00
+
+.         
+. eststo clear
+r; t=0.00 12:28:00
+
+. estpost tabstat voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 $controls if expansion==0&year>=2008 [weight=pop_total], by(year) nototal statistics(mean) columns(statistics)
+(analytic weights assumed)
+
+Summary statistics: mean
+     for variables: voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 unemp_rate_cty percent_in_poverty perc_black perc_native perc_asian perc_hisp median_income dem_campaign_spending_gap total_campaign_spending pop_den_100k
+  by categories of: year
+
+        year |   e(mean) 
+-------------+-----------
+2008         |           
+voteshare_~m |  46.57707 
+voteshare_~p |  52.58398 
+voteshare_~h |  1.057252 
+     turnout |  42.48098 
+  pctic_0400 |  68.44815 
+unemp_rate~y |  5.508549 
+percent_in~y |  14.14487 
+  perc_black |  16.83102 
+ perc_native |  1.209536 
+  perc_asian |  2.909702 
+   perc_hisp |  15.33099 
+median_inc~e |  5.003381 
+dem_campai~p | -.2161817 
+total_camp~g |  19.71282 
+pop_den_100k |  .6926556 
+-------------+-----------
+2012         |           
+voteshare_~m |  44.59949 
+voteshare_~p |   54.1088 
+voteshare_~h |  1.291714 
+     turnout |  40.18463 
+  pctic_0400 |  67.17117 
+unemp_rate~y |   7.59014 
+percent_in~y |  17.01064 
+  perc_black |  17.13206 
+ perc_native |  1.279458 
+  perc_asian |     3.289 
+   perc_hisp |  16.57703 
+median_inc~e |  4.929007 
+dem_campai~p | -2.583802 
+total_camp~g |  12.35019 
+pop_den_100k |  .7473104 
+-------------+-----------
+2016         |           
+voteshare_~m |  43.08295 
+voteshare_~p |  52.27692 
+voteshare_~h |  4.640125 
+     turnout |  40.59602 
+  pctic_0400 |  76.58645 
+unemp_rate~y |  4.776324 
+percent_in~y |  14.81049 
+  perc_black |  17.39489 
+ perc_native |  1.292767 
+  perc_asian |  3.731537 
+   perc_hisp |  17.66585 
+median_inc~e |  5.542775 
+dem_campai~p | -19.45831 
+total_camp~g |   43.3714 
+pop_den_100k |  .7998266 
+r; t=0.07 12:28:00
+
+.         esttab using "$table_results_path//analysis_panel_full.rtf", append /// 
+>         main(mean)  nostar unstack compress label noobs ///
+>         title("Means for Non-Expansion Counties, By Year") nonumber 
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+r; t=0.14 12:28:00
+
+.         
+. //See if 2008-12 differences are significantly different
+. foreach y of varlist voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 $controls {
+  2.         eststo clear
+  3.         eststo: qui reg `y' ib2008.year if year!=2016&year!=2004  [weight=pop_total]
+  4.         eststo: qui reg `y' ib2008.year if year!=2016&year!=2004&expansion==1  [weight=pop_total]
+  5.         eststo: qui reg `y' ib2008.year if year!=2016&year!=2004&expansion==0  [weight=pop_total]
+  6.         esttab using "$table_results_path/analysis_panel_full.rtf", append keep(2012.year) ///
+>         mlabel("All Counties" "Expansion Counties" "Non-Expansion Counties") ///
+>         noobs nonote onecell label compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         title("Add to Table 1 & 2. 2008-12 differences significantly different for `y'?") 
+  7.         }
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=1.85 12:28:02
+
+. 
+. //See if 2012-16 differences are significantly different
+. foreach y of varlist voteshare_dem voteshare_gop voteshare_oth turnout pctic_0400 $controls {
+  2.         eststo clear
+  3.         eststo: qui reg `y' ib2012.year if year!=2008&year!=2004  [weight=pop_total]
+  4.         eststo: qui reg `y' ib2012.year if year!=2008&year!=2004&expansion==1  [weight=pop_total]
+  5.         eststo: qui reg `y' ib2012.year if year!=2008&year!=2004&expansion==0  [weight=pop_total]
+  6.         esttab using "$table_results_path//analysis_panel_full.rtf", append keep(2016.year) ///
+>         mlabel("All Counties" "Expansion Counties" "Non-Expansion Counties") ///
+>         noobs nonote onecell label compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         title("Add to Table 1 & 2. 2012-16 differences significantly different for `y'?") 
+  7.         }
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+(est1 stored)
+(est2 stored)
+(est3 stored)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables//analysis_panel_full.rtf)
+r; t=1.49 12:28:03
+
+.         
+.         
+. /* TABLE 3. REGRESSION RESULTS FOR ALL COUNTIES POOLED */
+. eststo clear
+r; t=0.00 12:28:03
+
+. eststo: reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =      22.51
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9753
+                                                  Adj R-squared   =     0.9629
+                                                  Within R-sq.    =     0.2765
+Number of clusters (state)   =         50         Root MSE        =     3.0912
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2524102   .0965094     2.62   0.012     .0584674    .4463531
+           unemp_rate_cty |   .4266869   .2302504     1.85   0.070    -.0360185    .8893924
+       percent_in_poverty |  -.0198312   .1014034    -0.20   0.846     -.223609    .1839466
+               perc_black |   .5198229   .3318642     1.57   0.124    -.1470831    1.186729
+              perc_native |   -4.37744   1.511846    -2.90   0.006    -7.415608   -1.339271
+               perc_asian |   2.312632   .3297562     7.01   0.000     1.649962    2.975302
+                perc_hisp |   1.090177   .2138711     5.10   0.000      .660387    1.519967
+            median_income |   .9800339   .5009013     1.96   0.056     -.026565    1.986633
+dem_campaign_spending_gap |  -.0009095   .0009341    -0.97   0.335    -.0027868    .0009677
+  total_campaign_spending |   .0001779   .0009758     0.18   0.856    -.0017831    .0021388
+             pop_den_100k |   4.490612   1.588535     2.83   0.007     1.298331    7.682894
+                    _cons |  -16.48543   7.998728    -2.06   0.045    -32.55947   -.4113832
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est1 stored)
+r; t=0.27 12:28:03
+
+. eststo: reghdfe voteshare_gop pctic_0400 $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =      32.98
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9538
+                                                  Adj R-squared   =     0.9305
+                                                  Within R-sq.    =     0.1594
+Number of clusters (state)   =         50         Root MSE        =     4.2590
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_gop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.2372644   .0995337    -2.38   0.021    -.4372849    -.037244
+           unemp_rate_cty |   -.537637   .2359802    -2.28   0.027    -1.011857   -.0634171
+       percent_in_poverty |   .0759975   .0859297     0.88   0.381    -.0966847    .2486797
+               perc_black |  -.5271822   .3166776    -1.66   0.102     -1.16357    .1092053
+              perc_native |   2.576206   1.367881     1.88   0.066    -.1726527    5.325065
+               perc_asian |  -2.267221    .364911    -6.21   0.000    -3.000537   -1.533905
+                perc_hisp |  -.9750603   .2012908    -4.84   0.000    -1.379569   -.5705513
+            median_income |  -1.883475   .6464729    -2.91   0.005     -3.18261   -.5843386
+dem_campaign_spending_gap |   .0007421   .0009584     0.77   0.442     -.001184    .0026682
+  total_campaign_spending |  -.0000334   .0009972    -0.03   0.973    -.0020375    .0019706
+             pop_den_100k |  -3.398553   1.666922    -2.04   0.047    -6.748357   -.0487478
+                    _cons |   116.1634   6.371649    18.23   0.000     103.3591    128.9678
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est2 stored)
+r; t=0.18 12:28:04
+
+. eststo: reghdfe voteshare_oth pctic_0400 $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =       7.76
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7500
+                                                  Adj R-squared   =     0.6242
+                                                  Within R-sq.    =     0.0473
+Number of clusters (state)   =         50         Root MSE        =     1.4892
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_oth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .0035101   .0300389     0.12   0.907    -.0568554    .0638756
+           unemp_rate_cty |   .1624562    .104625     1.55   0.127    -.0477956    .3727081
+       percent_in_poverty |  -.0163387   .0369566    -0.44   0.660    -.0906058    .0579283
+               perc_black |    .041053   .0742642     0.55   0.583    -.1081866    .1902925
+              perc_native |   1.603015   .5504988     2.91   0.005     .4967462    2.709284
+               perc_asian |  -.0197737    .158675    -0.12   0.901     -.338643    .2990955
+                perc_hisp |  -.0799352   .0813659    -0.98   0.331    -.2434461    .0835758
+            median_income |    .928966   .5301006     1.75   0.086    -.1363111    1.994243
+dem_campaign_spending_gap |   .0001573   .0001248     1.26   0.213    -.0000934     .000408
+  total_campaign_spending |  -.0001451   .0001426    -1.02   0.314    -.0004316    .0001414
+             pop_den_100k |  -1.008868   .1932172    -5.22   0.000    -1.397152   -.6205834
+                    _cons |  -3.185786   3.552559    -0.90   0.374    -10.32492    3.953349
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est3 stored)
+r; t=0.13 12:28:04
+
+. eststo: reghdfe turnout pctic_0400 $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =       5.62
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9187
+                                                  Adj R-squared   =     0.8778
+                                                  Within R-sq.    =     0.0311
+Number of clusters (state)   =         50         Root MSE        =     3.0369
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+                  turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.0374049   .0440951    -0.85   0.400    -.1260173    .0512075
+           unemp_rate_cty |  -.2291512   .1430921    -1.60   0.116    -.5167055    .0584031
+       percent_in_poverty |   .1085666   .0939005     1.16   0.253    -.0801335    .2972667
+               perc_black |   .0444026   .2340384     0.19   0.850    -.4259152    .5147204
+              perc_native |  -1.169797   .9632466    -1.21   0.230    -3.105513      .76592
+               perc_asian |  -.9608676   .2953331    -3.25   0.002    -1.554362   -.3673736
+                perc_hisp |  -.0370924   .2013323    -0.18   0.855    -.4416849    .3675001
+            median_income |   .8776223   .6057313     1.45   0.154    -.3396403    2.094885
+dem_campaign_spending_gap |  -.0007601   .0005442    -1.40   0.169    -.0018537    .0003335
+  total_campaign_spending |   .0009461   .0005396     1.75   0.086    -.0001383    .0020304
+             pop_den_100k |  -.8182981   .6357466    -1.29   0.204    -2.095879    .4592825
+                    _cons |   47.15145    4.62283    10.20   0.000     37.86153    56.44138
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est4 stored)
+r; t=0.13 12:28:04
+
+. esttab using "$table_results_path/analysis_panel_full.rtf", append ///
+>         keep(pctic_0400 $controls) ///
+>         mlabel("Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout") ///
+>         onecell label compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         title("Table 3. Regression Results Showing Association Between County Insurance Rate and Voting Patterns") 
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=0.14 12:28:04
+
+. 
+. /* TABLE 4. REGRESSION RESULTS FOR EXPANSION VS. NON-EXPANSION COUNTIES */
+. eststo clear
+r; t=0.00 12:28:04
+
+. eststo: reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if expansion==1&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,404
+Absorbing 2 HDFE groups                           F(  11,     30) =      30.30
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9796
+                                                  Adj R-squared   =     0.9693
+                                                  Within R-sq.    =     0.4067
+Number of clusters (state)   =         31         Root MSE        =     2.6627
+
+                                              (Std. Err. adjusted for 31 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .3582955   .1163658     3.08   0.004     .1206448    .5959461
+           unemp_rate_cty |  -.0002651   .2433436    -0.00   0.999     -.497239    .4967087
+       percent_in_poverty |   .2604399    .075972     3.43   0.002     .1052844    .4155954
+               perc_black |    .124646   .2698972     0.46   0.648    -.4265576    .6758497
+              perc_native |  -2.811137   1.944504    -1.45   0.159    -6.782343    1.160069
+               perc_asian |   2.354828   .4235464     5.56   0.000      1.48983    3.219825
+                perc_hisp |   1.364583   .2365681     5.77   0.000     .8814466     1.84772
+            median_income |   2.154358   .6386833     3.37   0.002     .8499923    3.458723
+dem_campaign_spending_gap |   .0001157    .000357     0.32   0.748    -.0006135    .0008449
+  total_campaign_spending |  -.0014444   .0003486    -4.14   0.000    -.0021564   -.0007324
+             pop_den_100k |   4.003394    .813379     4.92   0.000     2.342252    5.664535
+                    _cons |  -36.30995   8.876615    -4.09   0.000    -54.43842   -18.18148
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1468        1468           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est1 stored)
+r; t=0.08 12:28:04
+
+. eststo: reghdfe voteshare_gop pctic_0400 $controls [aweight=pop_total] if expansion==1&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,404
+Absorbing 2 HDFE groups                           F(  11,     30) =      39.51
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9775
+                                                  Adj R-squared   =     0.9660
+                                                  Within R-sq.    =     0.3804
+Number of clusters (state)   =         31         Root MSE        =     2.7542
+
+                                              (Std. Err. adjusted for 31 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_gop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.3744823   .1164644    -3.22   0.003    -.6123343   -.1366304
+           unemp_rate_cty |  -.0581358   .2406275    -0.24   0.811    -.5495627    .4332912
+       percent_in_poverty |   -.150318   .0715244    -2.10   0.044    -.2963904   -.0042457
+               perc_black |  -.2993835   .2807618    -1.07   0.295    -.8727757    .2740087
+              perc_native |   .8843535   1.792374     0.49   0.625    -2.776163     4.54487
+               perc_asian |   -2.43544   .4492661    -5.42   0.000    -3.352964   -1.517916
+                perc_hisp |  -1.263792   .2501719    -5.05   0.000    -1.774712   -.7528733
+            median_income |  -2.280691   .6594336    -3.46   0.002    -3.627434   -.9339475
+dem_campaign_spending_gap |  -.0004373   .0004096    -1.07   0.294    -.0012739    .0003992
+  total_campaign_spending |   .0015122    .000361     4.19   0.000      .000775    .0022495
+             pop_den_100k |  -3.061901   .8143585    -3.76   0.001    -4.725043   -1.398758
+                    _cons |   135.8514   7.517704    18.07   0.000     120.4982    151.2046
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1468        1468           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est2 stored)
+r; t=0.08 12:28:04
+
+. eststo: reghdfe voteshare_oth pctic_0400 $controls [aweight=pop_total] if expansion==1&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,404
+Absorbing 2 HDFE groups                           F(  11,     30) =      33.32
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.8937
+                                                  Adj R-squared   =     0.8399
+                                                  Within R-sq.    =     0.1214
+Number of clusters (state)   =         31         Root MSE        =     0.7975
+
+                                              (Std. Err. adjusted for 31 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_oth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .0186868   .0268754     0.70   0.492       -.0362    .0735736
+           unemp_rate_cty |   .0726279   .0866715     0.84   0.409    -.1043788    .2496346
+       percent_in_poverty |   -.076463   .0261044    -2.93   0.006    -.1297753   -.0231508
+               perc_black |   .1854182   .0915235     2.03   0.052    -.0014978    .3723341
+              perc_native |   1.853522   .7656007     2.42   0.022     .2899567    3.417087
+               perc_asian |   .0156979   .1258934     0.12   0.902    -.2414107    .2728065
+                perc_hisp |  -.1168761   .0882757    -1.32   0.196    -.2971592     .063407
+            median_income |   .2407088   .2337665     1.03   0.311    -.2367061    .7181237
+dem_campaign_spending_gap |   .0003138   .0001309     2.40   0.023     .0000466    .0005811
+  total_campaign_spending |  -.0000829   .0001582    -0.52   0.604     -.000406    .0002403
+             pop_den_100k |  -.9476922   .1229546    -7.71   0.000    -1.198799   -.6965853
+                    _cons |   -.237976   3.845771    -0.06   0.951    -8.092087    7.616135
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1468        1468           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est3 stored)
+r; t=0.08 12:28:04
+
+. eststo: reghdfe turnout pctic_0400 $controls [aweight=pop_total] if expansion==1&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,404
+Absorbing 2 HDFE groups                           F(  11,     30) =      10.71
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9116
+                                                  Adj R-squared   =     0.8667
+                                                  Within R-sq.    =     0.0388
+Number of clusters (state)   =         31         Root MSE        =     3.2542
+
+                                              (Std. Err. adjusted for 31 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+                  turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   -.096061   .0470591    -2.04   0.050    -.1921684    .0000465
+           unemp_rate_cty |  -.3810816   .1689476    -2.26   0.032    -.7261186   -.0360446
+       percent_in_poverty |   .1157382   .1224569     0.95   0.352     -.134352    .3658285
+               perc_black |   .1422811   .3714329     0.38   0.704    -.6162862    .9008484
+              perc_native |   -.824057    .995532    -0.83   0.414    -2.857205    1.209091
+               perc_asian |   -.820618   .2850714    -2.88   0.007    -1.402811   -.2384245
+                perc_hisp |  -.2121458   .1396552    -1.52   0.139    -.4973598    .0730682
+            median_income |   .9882209   .6132446     1.61   0.118    -.2641916    2.240633
+dem_campaign_spending_gap |  -.0012203   .0003955    -3.09   0.004    -.0020281   -.0004125
+  total_campaign_spending |   .0007486   .0004063     1.84   0.075    -.0000812    .0015784
+             pop_den_100k |  -.5571722   .7016051    -0.79   0.433    -1.990041    .8756966
+                    _cons |   53.70209   8.175843     6.57   0.000     37.00479    70.39939
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1468        1468           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est4 stored)
+r; t=0.12 12:28:04
+
+. 
+. eststo: reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if expansion==0&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,923
+Absorbing 2 HDFE groups                           F(  11,     18) =     475.31
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9705
+                                                  Adj R-squared   =     0.9555
+                                                  Within R-sq.    =     0.3008
+Number of clusters (state)   =         19         Root MSE        =     3.2520
+
+                                              (Std. Err. adjusted for 19 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .3600843   .0534329     6.74   0.000      .247826    .4723426
+           unemp_rate_cty |   1.003385    .216671     4.63   0.000     .5481759    1.458594
+       percent_in_poverty |  -.1179926   .0591233    -2.00   0.061    -.2422061     .006221
+               perc_black |   .7106462   .3810445     1.86   0.079    -.0898986    1.511191
+              perc_native |  -5.687761   1.638841    -3.47   0.003    -9.130837   -2.244685
+               perc_asian |   1.974297   .6191319     3.19   0.005     .6735491    3.275045
+                perc_hisp |   .3038375   .2177595     1.40   0.180    -.1536582    .7613332
+            median_income |   .4212327   .4908014     0.86   0.402    -.6099027    1.452368
+dem_campaign_spending_gap |   -.001556   .0014312    -1.09   0.291    -.0045628    .0014508
+  total_campaign_spending |   .0026665   .0016138     1.65   0.116    -.0007239    .0060569
+             pop_den_100k |   12.96408   3.955305     3.28   0.004     4.654298    21.27387
+                    _cons |  -13.55562   8.203429    -1.65   0.116    -30.79038    3.679146
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1641        1641           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est5 stored)
+r; t=0.09 12:28:04
+
+. eststo: reghdfe voteshare_gop pctic_0400 $controls [aweight=pop_total] if expansion==0&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,923
+Absorbing 2 HDFE groups                           F(  11,     18) =     269.70
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9164
+                                                  Adj R-squared   =     0.8741
+                                                  Within R-sq.    =     0.1338
+Number of clusters (state)   =         19         Root MSE        =     5.6259
+
+                                              (Std. Err. adjusted for 19 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_gop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.2903865   .0562407    -5.16   0.000    -.4085437   -.1722292
+           unemp_rate_cty |   -1.17665   .2595529    -4.53   0.000     -1.72195   -.6313491
+       percent_in_poverty |    .042778   .0811113     0.53   0.604    -.1276305    .2131866
+               perc_black |  -.5712695   .3646194    -1.57   0.135    -1.337306    .1947673
+              perc_native |   4.490584   1.224089     3.67   0.002     1.918868      7.0623
+               perc_asian |  -1.717674   .6066135    -2.83   0.011    -2.992122   -.4432267
+                perc_hisp |  -.0914946   .2360541    -0.39   0.703    -.5874258    .4044367
+            median_income |  -3.197651   1.804188    -1.77   0.093    -6.988109    .5928069
+dem_campaign_spending_gap |   .0015668   .0014901     1.05   0.307    -.0015638    .0046975
+  total_campaign_spending |    -.00248   .0018827    -1.32   0.204    -.0064354    .0014754
+             pop_den_100k |  -13.99446   4.444357    -3.15   0.006     -23.3317   -4.657209
+                    _cons |   118.3448   11.36228    10.42   0.000     94.47355    142.2161
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1641        1641           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est6 stored)
+r; t=0.08 12:28:04
+
+. eststo: reghdfe voteshare_oth pctic_0400 $controls [aweight=pop_total] if expansion==0&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,923
+Absorbing 2 HDFE groups                           F(  11,     18) =      20.28
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.6593
+                                                  Adj R-squared   =     0.4869
+                                                  Within R-sq.    =     0.0766
+Number of clusters (state)   =         19         Root MSE        =     2.1336
+
+                                              (Std. Err. adjusted for 19 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_oth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.0340414   .0362045    -0.94   0.360    -.1101043    .0420215
+           unemp_rate_cty |   .2667115   .2101125     1.27   0.220    -.1747184    .7081414
+       percent_in_poverty |   .1237349   .0747512     1.66   0.115    -.0333115    .2807814
+               perc_black |  -.1088467   .0741004    -1.47   0.159    -.2645259    .0468326
+              perc_native |   1.070471   .5452216     1.96   0.065     -.074997    2.215939
+               perc_asian |   .0005855   .3430277     0.00   0.999    -.7200889      .72126
+                perc_hisp |  -.1122628   .1636553    -0.69   0.501    -.4560898    .2315641
+            median_income |   2.572247   1.802432     1.43   0.171    -1.214523    6.359017
+dem_campaign_spending_gap |  -.0003017   .0002858    -1.06   0.305    -.0009022    .0002988
+  total_campaign_spending |  -.0004104   .0009265    -0.44   0.663     -.002357    .0015361
+             pop_den_100k |   1.033402   .4955563     2.09   0.052    -.0077228    2.074527
+                    _cons |  -10.36514   10.07968    -1.03   0.317    -31.54176    10.81149
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1641        1641           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est7 stored)
+r; t=0.09 12:28:05
+
+. eststo: reghdfe turnout pctic_0400 $controls [aweight=pop_total] if expansion==0&year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,923
+Absorbing 2 HDFE groups                           F(  11,     18) =      46.15
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9472
+                                                  Adj R-squared   =     0.9205
+                                                  Within R-sq.    =     0.0788
+Number of clusters (state)   =         19         Root MSE        =     2.3415
+
+                                              (Std. Err. adjusted for 19 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+                  turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2079278    .053844     3.86   0.001     .0948058    .3210497
+           unemp_rate_cty |   .2223475   .1396612     1.59   0.129    -.0710697    .5157648
+       percent_in_poverty |   -.042824   .0454171    -0.94   0.358    -.1382418    .0525938
+               perc_black |  -.1647214   .1140618    -1.44   0.166    -.4043564    .0749136
+              perc_native |   .0493025    .773751     0.06   0.950    -1.576288    1.674893
+               perc_asian |  -.7110846   .2954109    -2.41   0.027     -1.33172   -.0904493
+                perc_hisp |   .1152652   .2062643     0.56   0.583      -.31808    .5486104
+            median_income |  -.4471654   .4507807    -0.99   0.334    -1.394221    .4998897
+dem_campaign_spending_gap |   .0038562   .0009098     4.24   0.000     .0019448    .0057676
+  total_campaign_spending |   .0042265   .0007003     6.03   0.000     .0027551    .0056979
+             pop_den_100k |  -2.926903     .90353    -3.24   0.005    -4.825149   -1.028657
+                    _cons |   33.29872   5.932379     5.61   0.000     20.83526    45.76219
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1641        1641           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est8 stored)
+r; t=0.12 12:28:05
+
+. 
+. //Chow Test to see if "insurance rate" coefficient is different for expansion and non-expansion states
+. qui reghdfe voteshare_dem i.expansion#c.pctic_0400 $chow_controls [aweight=pop_total] if year>=2008, absorb(i.expansion#i.year i.expansion#i.combined_fips) vce(cluster state)
+r; t=0.40 12:28:05
+
+.         test _b[1.expansion#c.pctic_0400] = _b[0.expansion#c.pctic_0400] 
+
+ ( 1)  - 0b.expansion#c.pctic_0400 + 1.expansion#c.pctic_0400 = 0
+
+       F(  1,    49) =    0.00
+            Prob > F =    0.9888
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.unemp_rate_cty] = _b[0.expansion#c.unemp_rate_cty] 
+
+ ( 1)  - 0b.expansion#c.unemp_rate_cty + 1.expansion#c.unemp_rate_cty = 0
+
+       F(  1,    49) =    9.70
+            Prob > F =    0.0031
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.percent_in_poverty] = _b[0.expansion#c.percent_in_poverty] 
+
+ ( 1)  - 0b.expansion#c.percent_in_poverty + 1.expansion#c.percent_in_poverty = 0
+
+       F(  1,    49) =   15.77
+            Prob > F =    0.0002
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_black] = _b[0.expansion#c.perc_black] 
+
+ ( 1)  - 0b.expansion#c.perc_black + 1.expansion#c.perc_black = 0
+
+       F(  1,    49) =    1.62
+            Prob > F =    0.2095
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_native] = _b[0.expansion#c.perc_native] 
+
+ ( 1)  - 0b.expansion#c.perc_native + 1.expansion#c.perc_native = 0
+
+       F(  1,    49) =    1.31
+            Prob > F =    0.2585
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_asian] = _b[0.expansion#c.perc_asian] 
+
+ ( 1)  - 0b.expansion#c.perc_asian + 1.expansion#c.perc_asian = 0
+
+       F(  1,    49) =    0.26
+            Prob > F =    0.6095
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_hisp] = _b[0.expansion#c.perc_hisp] 
+
+ ( 1)  - 0b.expansion#c.perc_hisp + 1.expansion#c.perc_hisp = 0
+
+       F(  1,    49) =   11.13
+            Prob > F =    0.0016
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.median_income] = _b[0.expansion#c.median_income] 
+
+ ( 1)  - 0b.expansion#c.median_income + 1.expansion#c.median_income = 0
+
+       F(  1,    49) =    4.72
+            Prob > F =    0.0346
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.dem_campaign_spending_gap] = _b[0.expansion#c.dem_campaign_spending_gap] 
+
+ ( 1)  - 0b.expansion#c.dem_campaign_spending_gap + 1.expansion#c.dem_campaign_spending_gap = 0
+
+       F(  1,    49) =    1.33
+            Prob > F =    0.2550
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.total_campaign_spending] = _b[0.expansion#c.total_campaign_spending] 
+
+ ( 1)  - 0b.expansion#c.total_campaign_spending + 1.expansion#c.total_campaign_spending = 0
+
+       F(  1,    49) =    6.41
+            Prob > F =    0.0146
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.pop_den_100k] = _b[0.expansion#c.pop_den_100k]   
+
+ ( 1)  - 0b.expansion#c.pop_den_100k + 1.expansion#c.pop_den_100k = 0
+
+       F(  1,    49) =    5.09
+            Prob > F =    0.0286
+r; t=0.00 12:28:05
+
+. qui reghdfe voteshare_gop i.expansion#c.pctic_0400 $chow_controls [aweight=pop_total] if year>=2008, absorb(i.expansion#i.year i.expansion#i.combined_fips) vce(cluster state)
+r; t=0.35 12:28:05
+
+.         test _b[1.expansion#c.pctic_0400] = _b[0.expansion#c.pctic_0400] 
+
+ ( 1)  - 0b.expansion#c.pctic_0400 + 1.expansion#c.pctic_0400 = 0
+
+       F(  1,    49) =    0.43
+            Prob > F =    0.5151
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.unemp_rate_cty] = _b[0.expansion#c.unemp_rate_cty] 
+
+ ( 1)  - 0b.expansion#c.unemp_rate_cty + 1.expansion#c.unemp_rate_cty = 0
+
+       F(  1,    49) =   10.23
+            Prob > F =    0.0024
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.percent_in_poverty] = _b[0.expansion#c.percent_in_poverty] 
+
+ ( 1)  - 0b.expansion#c.percent_in_poverty + 1.expansion#c.percent_in_poverty = 0
+
+       F(  1,    49) =    3.27
+            Prob > F =    0.0768
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_black] = _b[0.expansion#c.perc_black] 
+
+ ( 1)  - 0b.expansion#c.perc_black + 1.expansion#c.perc_black = 0
+
+       F(  1,    49) =    0.36
+            Prob > F =    0.5523
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_native] = _b[0.expansion#c.perc_native] 
+
+ ( 1)  - 0b.expansion#c.perc_native + 1.expansion#c.perc_native = 0
+
+       F(  1,    49) =    2.81
+            Prob > F =    0.0998
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_asian] = _b[0.expansion#c.perc_asian] 
+
+ ( 1)  - 0b.expansion#c.perc_asian + 1.expansion#c.perc_asian = 0
+
+       F(  1,    49) =    0.93
+            Prob > F =    0.3401
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.perc_hisp] = _b[0.expansion#c.perc_hisp] 
+
+ ( 1)  - 0b.expansion#c.perc_hisp + 1.expansion#c.perc_hisp = 0
+
+       F(  1,    49) =   11.88
+            Prob > F =    0.0012
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.median_income] = _b[0.expansion#c.median_income] 
+
+ ( 1)  - 0b.expansion#c.median_income + 1.expansion#c.median_income = 0
+
+       F(  1,    49) =    0.24
+            Prob > F =    0.6300
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.dem_campaign_spending_gap] = _b[0.expansion#c.dem_campaign_spending_gap] 
+
+ ( 1)  - 0b.expansion#c.dem_campaign_spending_gap + 1.expansion#c.dem_campaign_spending_gap = 0
+
+       F(  1,    49) =    1.74
+            Prob > F =    0.1937
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.total_campaign_spending] = _b[0.expansion#c.total_campaign_spending] 
+
+ ( 1)  - 0b.expansion#c.total_campaign_spending + 1.expansion#c.total_campaign_spending = 0
+
+       F(  1,    49) =    4.48
+            Prob > F =    0.0394
+r; t=0.00 12:28:05
+
+.         test _b[1.expansion#c.pop_den_100k] = _b[0.expansion#c.pop_den_100k]   
+
+ ( 1)  - 0b.expansion#c.pop_den_100k + 1.expansion#c.pop_den_100k = 0
+
+       F(  1,    49) =    6.05
+            Prob > F =    0.0175
+r; t=0.00 12:28:05
+
+. qui reghdfe voteshare_oth i.expansion#c.pctic_0400 $chow_controls [aweight=pop_total] if year>=2008, absorb(i.expansion#i.year i.expansion#i.combined_fips) vce(cluster state)
+r; t=0.37 12:28:06
+
+.         test _b[1.expansion#c.pctic_0400] = _b[0.expansion#c.pctic_0400] 
+
+ ( 1)  - 0b.expansion#c.pctic_0400 + 1.expansion#c.pctic_0400 = 0
+
+       F(  1,    49) =    1.40
+            Prob > F =    0.2418
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.unemp_rate_cty] = _b[0.expansion#c.unemp_rate_cty] 
+
+ ( 1)  - 0b.expansion#c.unemp_rate_cty + 1.expansion#c.unemp_rate_cty = 0
+
+       F(  1,    49) =    0.75
+            Prob > F =    0.3901
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.percent_in_poverty] = _b[0.expansion#c.percent_in_poverty] 
+
+ ( 1)  - 0b.expansion#c.percent_in_poverty + 1.expansion#c.percent_in_poverty = 0
+
+       F(  1,    49) =    6.60
+            Prob > F =    0.0133
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_black] = _b[0.expansion#c.perc_black] 
+
+ ( 1)  - 0b.expansion#c.perc_black + 1.expansion#c.perc_black = 0
+
+       F(  1,    49) =    6.38
+            Prob > F =    0.0149
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_native] = _b[0.expansion#c.perc_native] 
+
+ ( 1)  - 0b.expansion#c.perc_native + 1.expansion#c.perc_native = 0
+
+       F(  1,    49) =    0.71
+            Prob > F =    0.4042
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_asian] = _b[0.expansion#c.perc_asian] 
+
+ ( 1)  - 0b.expansion#c.perc_asian + 1.expansion#c.perc_asian = 0
+
+       F(  1,    49) =    0.00
+            Prob > F =    0.9667
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_hisp] = _b[0.expansion#c.perc_hisp] 
+
+ ( 1)  - 0b.expansion#c.perc_hisp + 1.expansion#c.perc_hisp = 0
+
+       F(  1,    49) =    0.00
+            Prob > F =    0.9800
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.median_income] = _b[0.expansion#c.median_income] 
+
+ ( 1)  - 0b.expansion#c.median_income + 1.expansion#c.median_income = 0
+
+       F(  1,    49) =    1.70
+            Prob > F =    0.1982
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.dem_campaign_spending_gap] = _b[0.expansion#c.dem_campaign_spending_gap] 
+
+ ( 1)  - 0b.expansion#c.dem_campaign_spending_gap + 1.expansion#c.dem_campaign_spending_gap = 0
+
+       F(  1,    49) =    3.95
+            Prob > F =    0.0525
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.total_campaign_spending] = _b[0.expansion#c.total_campaign_spending] 
+
+ ( 1)  - 0b.expansion#c.total_campaign_spending + 1.expansion#c.total_campaign_spending = 0
+
+       F(  1,    49) =    0.13
+            Prob > F =    0.7246
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.pop_den_100k] = _b[0.expansion#c.pop_den_100k]   
+
+ ( 1)  - 0b.expansion#c.pop_den_100k + 1.expansion#c.pop_den_100k = 0
+
+       F(  1,    49) =   15.55
+            Prob > F =    0.0003
+r; t=0.00 12:28:06
+
+. qui reghdfe turnout i.expansion#c.pctic_0400 $chow_controls [aweight=pop_total] if year>=2008, absorb(i.expansion#i.year i.expansion#i.combined_fips) vce(cluster state)
+r; t=0.36 12:28:06
+
+.         test _b[1.expansion#c.pctic_0400] = _b[0.expansion#c.pctic_0400] 
+
+ ( 1)  - 0b.expansion#c.pctic_0400 + 1.expansion#c.pctic_0400 = 0
+
+       F(  1,    49) =   18.52
+            Prob > F =    0.0001
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.unemp_rate_cty] = _b[0.expansion#c.unemp_rate_cty] 
+
+ ( 1)  - 0b.expansion#c.unemp_rate_cty + 1.expansion#c.unemp_rate_cty = 0
+
+       F(  1,    49) =    7.74
+            Prob > F =    0.0076
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.percent_in_poverty] = _b[0.expansion#c.percent_in_poverty] 
+
+ ( 1)  - 0b.expansion#c.percent_in_poverty + 1.expansion#c.percent_in_poverty = 0
+
+       F(  1,    49) =    1.50
+            Prob > F =    0.2271
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_black] = _b[0.expansion#c.perc_black] 
+
+ ( 1)  - 0b.expansion#c.perc_black + 1.expansion#c.perc_black = 0
+
+       F(  1,    49) =    0.63
+            Prob > F =    0.4300
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_native] = _b[0.expansion#c.perc_native] 
+
+ ( 1)  - 0b.expansion#c.perc_native + 1.expansion#c.perc_native = 0
+
+       F(  1,    49) =    0.49
+            Prob > F =    0.4874
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_asian] = _b[0.expansion#c.perc_asian] 
+
+ ( 1)  - 0b.expansion#c.perc_asian + 1.expansion#c.perc_asian = 0
+
+       F(  1,    49) =    0.07
+            Prob > F =    0.7883
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.perc_hisp] = _b[0.expansion#c.perc_hisp] 
+
+ ( 1)  - 0b.expansion#c.perc_hisp + 1.expansion#c.perc_hisp = 0
+
+       F(  1,    49) =    1.77
+            Prob > F =    0.1889
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.median_income] = _b[0.expansion#c.median_income] 
+
+ ( 1)  - 0b.expansion#c.median_income + 1.expansion#c.median_income = 0
+
+       F(  1,    49) =    3.63
+            Prob > F =    0.0627
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.dem_campaign_spending_gap] = _b[0.expansion#c.dem_campaign_spending_gap] 
+
+ ( 1)  - 0b.expansion#c.dem_campaign_spending_gap + 1.expansion#c.dem_campaign_spending_gap = 0
+
+       F(  1,    49) =   26.99
+            Prob > F =    0.0000
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.total_campaign_spending] = _b[0.expansion#c.total_campaign_spending] 
+
+ ( 1)  - 0b.expansion#c.total_campaign_spending + 1.expansion#c.total_campaign_spending = 0
+
+       F(  1,    49) =   18.98
+            Prob > F =    0.0001
+r; t=0.00 12:28:06
+
+.         test _b[1.expansion#c.pop_den_100k] = _b[0.expansion#c.pop_den_100k]   
+
+ ( 1)  - 0b.expansion#c.pop_den_100k + 1.expansion#c.pop_den_100k = 0
+
+       F(  1,    49) =    4.40
+            Prob > F =    0.0411
+r; t=0.00 12:28:06
+
+. 
+. esttab using "$table_results_path/analysis_panel_full.rtf", append ///
+>         keep(pctic_0400 $controls) ///
+>         mlabel("Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout" "Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout") ///
+>         mgroups("Expansion Counties" "Non-Expansion Counties",pattern(1 0 0 0 1 0 0 0)) ///
+>         onecell label compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         title("Table 4. Regression Results for Medicaid Expansion vs. Non-Expansion Counties") 
+(tabulating estimates stored by eststo; specify "." to tabulate the active results)
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=0.15 12:28:06
+
+.         
+.         
+. /* TABLE 6. SENSITIVITY ANALYSES DROPPING SOME YEARS */
+. eststo clear
+r; t=0.00 12:28:06
+
+. eststo: reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if year!=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      27.71
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9867
+                                                  Adj R-squared   =     0.9733
+                                                  Within R-sq.    =     0.4038
+Number of clusters (state)   =         50         Root MSE        =     2.7105
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2464719     .09768     2.52   0.015     .0501766    .4427672
+           unemp_rate_cty |   .6592451   .2571138     2.56   0.013     .1425556    1.175935
+       percent_in_poverty |  -.4351794   .1092465    -3.98   0.000    -.6547185   -.2156403
+               perc_black |   .8298094   .4020825     2.06   0.044     .0217943    1.637825
+              perc_native |    -6.6567   1.919599    -3.47   0.001    -10.51428   -2.799122
+               perc_asian |   3.087334   .6734278     4.58   0.000      1.73403    4.440637
+                perc_hisp |   1.497901   .3911828     3.83   0.000     .7117901    2.284013
+            median_income |   1.867776   .8451148     2.21   0.032     .1694539    3.566097
+dem_campaign_spending_gap |   -.001492   .0014905    -1.00   0.322    -.0044874    .0015033
+  total_campaign_spending |  -.0002163   .0016019    -0.14   0.893    -.0034355     .003003
+             pop_den_100k |   6.554021   2.615064     2.51   0.016     1.298852    11.80919
+                    _cons |  -35.54657   9.888543    -3.59   0.001    -55.41834    -15.6748
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est1 stored)
+r; t=0.10 12:28:06
+
+. eststo: reghdfe voteshare_gop pctic_0400 $controls [aweight=pop_total] if year!=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      31.68
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9791
+                                                  Adj R-squared   =     0.9580
+                                                  Within R-sq.    =     0.3131
+Number of clusters (state)   =         50         Root MSE        =     3.3776
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_gop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.2518478   .1084914    -2.32   0.024    -.4698695   -.0338261
+           unemp_rate_cty |   -.946015   .2699216    -3.50   0.001    -1.488443   -.4035873
+       percent_in_poverty |   .5287549   .1241054     4.26   0.000     .2793557    .7781541
+               perc_black |  -.8181227   .3513865    -2.33   0.024     -1.52426   -.1119851
+              perc_native |   4.288905   1.875473     2.29   0.027     .5200011     8.05781
+               perc_asian |  -2.767359   .8090973    -3.42   0.001    -4.393301   -1.141417
+                perc_hisp |  -1.345186    .398659    -3.37   0.001    -2.146322   -.5440513
+            median_income |  -3.266333   1.317177    -2.48   0.017      -5.9133   -.6193657
+dem_campaign_spending_gap |    .001072     .00154     0.70   0.490    -.0020227    .0041668
+  total_campaign_spending |   .0001667    .001664     0.10   0.921    -.0031772    .0035105
+             pop_den_100k |  -4.236235   2.635811    -1.61   0.114    -9.533096    1.060627
+                    _cons |   135.7255   9.176267    14.79   0.000     117.2851    154.1659
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est2 stored)
+r; t=0.16 12:28:07
+
+. eststo: reghdfe voteshare_oth pctic_0400 $controls [aweight=pop_total] if year!=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      18.35
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7873
+                                                  Adj R-squared   =     0.5729
+                                                  Within R-sq.    =     0.0761
+Number of clusters (state)   =         50         Root MSE        =     1.7688
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_oth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .0053759   .0350404     0.15   0.879    -.0650403    .0757922
+           unemp_rate_cty |   .2867698   .1600465     1.79   0.079    -.0348556    .6083952
+       percent_in_poverty |  -.0935755   .0890468    -1.05   0.298    -.2725218    .0853708
+               perc_black |  -.0116867   .1938913    -0.06   0.952    -.4013258    .3779523
+              perc_native |   2.367794   .6998552     3.38   0.001     .9613822    3.774206
+               perc_asian |  -.3199743   .3517244    -0.91   0.367    -1.026791    .3868422
+                perc_hisp |  -.1527149   .1871788    -0.82   0.419    -.5288647     .223435
+            median_income |   1.398557   .8220735     1.70   0.095    -.2534614    3.050576
+dem_campaign_spending_gap |     .00042   .0002341     1.79   0.079    -.0000505    .0008905
+  total_campaign_spending |   .0000496   .0002666     0.19   0.853    -.0004863    .0005854
+             pop_den_100k |  -2.317787   .4416753    -5.25   0.000    -3.205367   -1.430207
+                    _cons |  -.1789582   5.077672    -0.04   0.972    -10.38292    10.02501
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est3 stored)
+r; t=0.09 12:28:07
+
+. eststo: reghdfe turnout pctic_0400 $controls [aweight=pop_total] if year!=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =       7.01
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9789
+                                                  Adj R-squared   =     0.9576
+                                                  Within R-sq.    =     0.1415
+Number of clusters (state)   =         50         Root MSE        =     1.7676
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+                  turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |    .070393    .035988     1.96   0.056    -.0019276    .1427137
+           unemp_rate_cty |  -.2308555   .0978912    -2.36   0.022    -.4275752   -.0341358
+       percent_in_poverty |   .3388215   .0967484     3.50   0.001     .1443984    .5332446
+               perc_black |  -.7472898   .1606193    -4.65   0.000    -1.070066   -.4245133
+              perc_native |   .5094771   .8204367     0.62   0.537    -1.139252    2.158206
+               perc_asian |   .1580206   .2926628     0.54   0.592    -.4301073    .7461485
+                perc_hisp |    .484632   .1807146     2.68   0.010     .1214725    .8477916
+            median_income |   .9223743    .370047     2.49   0.016     .1787371    1.666012
+dem_campaign_spending_gap |   .0013202   .0011844     1.11   0.270      -.00106    .0037003
+  total_campaign_spending |   .0019497   .0010993     1.77   0.082    -.0002593    .0041588
+             pop_den_100k |   1.043056   1.195439     0.87   0.387    -1.359268    3.445381
+                    _cons |   23.99145   7.723812     3.11   0.003     8.469874    39.51304
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est4 stored)
+r; t=0.09 12:28:07
+
+. 
+. eststo: reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if year!=2012, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      14.89
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9741
+                                                  Adj R-squared   =     0.9479
+                                                  Within R-sq.    =     0.3309
+Number of clusters (state)   =         50         Root MSE        =     3.7155
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2306667   .1110688     2.08   0.043     .0074657    .4538677
+           unemp_rate_cty |   .3846252   .3528091     1.09   0.281    -.3243713    1.093622
+       percent_in_poverty |  -.0398047   .1815396    -0.22   0.827    -.4046222    .3250128
+               perc_black |    .443498   .3304326     1.34   0.186    -.2205311    1.107527
+              perc_native |  -4.104302   1.490765    -2.75   0.008    -7.100107   -1.108497
+               perc_asian |   2.610131   .3463875     7.54   0.000     1.914039    3.306222
+                perc_hisp |   1.165283   .2282322     5.11   0.000     .7066338    1.623933
+            median_income |  -.5981745   .8360295    -0.72   0.478    -2.278239     1.08189
+dem_campaign_spending_gap |  -.0017098   .0017872    -0.96   0.343    -.0053012    .0018817
+  total_campaign_spending |   .0009464   .0017939     0.53   0.600    -.0026586    .0045514
+             pop_den_100k |   4.653642   1.686272     2.76   0.008     1.264951    8.042333
+                    _cons |  -8.281192   10.71776    -0.77   0.443    -29.81933    13.25695
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est5 stored)
+r; t=0.09 12:28:07
+
+. eststo: reghdfe voteshare_gop pctic_0400 $controls [aweight=pop_total] if year!=2012, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      19.00
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9522
+                                                  Adj R-squared   =     0.9041
+                                                  Within R-sq.    =     0.1914
+Number of clusters (state)   =         50         Root MSE        =     5.0838
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_gop |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.2224225   .1070762    -2.08   0.043    -.4376001   -.0072449
+           unemp_rate_cty |  -.3575948   .3543313    -1.01   0.318     -1.06965    .3544606
+       percent_in_poverty |   .2261231   .1602412     1.41   0.165    -.0958937    .5481398
+               perc_black |  -.4868608   .3261989    -1.49   0.142    -1.142382    .1686605
+              perc_native |   2.092557   1.379175     1.52   0.136    -.6789997    4.864113
+               perc_asian |  -2.578812   .3998218    -6.45   0.000    -3.382284    -1.77534
+                perc_hisp |  -1.073841   .2167879    -4.95   0.000    -1.509493   -.6381893
+            median_income |   -.295031   .9258438    -0.32   0.751    -2.155584    1.565522
+dem_campaign_spending_gap |   .0017697   .0016586     1.07   0.291    -.0015633    .0051027
+  total_campaign_spending |  -.0010648   .0016675    -0.64   0.526    -.0044158    .0022863
+             pop_den_100k |  -3.517814   1.782686    -1.97   0.054    -7.100255    .0646283
+                    _cons |   106.5908   8.980187    11.87   0.000      88.5444    124.6371
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est6 stored)
+r; t=0.14 12:28:07
+
+. eststo: reghdfe voteshare_oth pctic_0400 $controls [aweight=pop_total] if year!=2012, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =       9.10
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.7980
+                                                  Adj R-squared   =     0.5944
+                                                  Within R-sq.    =     0.0597
+Number of clusters (state)   =         50         Root MSE        =     1.7691
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_oth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .0158794   .0338695     0.47   0.641    -.0521838    .0839427
+           unemp_rate_cty |   .0615492   .1219726     0.50   0.616    -.1835638    .3066623
+       percent_in_poverty |   -.018736   .0626199    -0.30   0.766    -.1445754    .1071034
+               perc_black |    .075568   .0709581     1.06   0.292    -.0670275    .2181636
+              perc_native |   1.761092    .570867     3.08   0.003     .6138919    2.908292
+               perc_asian |  -.0711103   .1898382    -0.37   0.710    -.4526045    .3103839
+                perc_hisp |  -.0711973    .079489    -0.90   0.375    -.2309365    .0885419
+            median_income |   1.228821   .7310322     1.68   0.099    -.2402429    2.697886
+dem_campaign_spending_gap |  -.0002003   .0001908    -1.05   0.299    -.0005838    .0001832
+  total_campaign_spending |   .0001464   .0002402     0.61   0.545    -.0003363    .0006292
+             pop_den_100k |  -1.029269    .194654    -5.29   0.000    -1.420441   -.6380973
+                    _cons |  -5.239901   4.884261    -1.07   0.289    -15.05519     4.57539
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est7 stored)
+r; t=0.10 12:28:07
+
+. eststo: reghdfe turnout pctic_0400 $controls [aweight=pop_total] if year!=2012, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 3 iterations)
+
+HDFE Linear regression                            Number of obs   =      6,218
+Absorbing 2 HDFE groups                           F(  11,     49) =      16.40
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9215
+                                                  Adj R-squared   =     0.8423
+                                                  Within R-sq.    =     0.0658
+Number of clusters (state)   =         50         Root MSE        =     3.3642
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+                  turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |  -.1749137   .0938847    -1.86   0.068    -.3635819    .0137546
+           unemp_rate_cty |   .1747095   .1708227     1.02   0.311    -.1685716    .5179906
+       percent_in_poverty |   -.176884   .1593788    -1.11   0.272    -.4971677    .1433998
+               perc_black |  -.1075636   .1020669    -1.05   0.297    -.3126746    .0975475
+              perc_native |  -.8203291   .7500999    -1.09   0.279    -2.327711    .6870531
+               perc_asian |  -.5157505   .2446531    -2.11   0.040    -1.007399   -.0241017
+                perc_hisp |   .0665795   .2036208     0.33   0.745    -.3426118    .4757709
+            median_income |  -1.103561   .5587457    -1.98   0.054    -2.226403    .0192803
+dem_campaign_spending_gap |  -.0010507   .0006343    -1.66   0.104    -.0023254     .000224
+  total_campaign_spending |   .0009874   .0006655     1.48   0.144    -.0003501    .0023248
+             pop_den_100k |  -.7380469   .4829646    -1.53   0.133    -1.708601    .2325069
+                    _cons |   68.69683   6.430514    10.68   0.000     55.77423    81.61943
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         2           0           2     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+(est8 stored)
+r; t=0.10 12:28:07
+
+.                         
+. esttab using "$table_results_path/analysis_panel_full.rtf", append ///
+>         keep(pctic_0400 $controls) ///
+>         mlabel("Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout" "Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout") ///
+>         mgroups("Omit Year 2008" "Omit Year 2012",pattern(1 0 0 0 1 0 0 0)) ///
+>         onecell label compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         title("Table 6. Sensitivity Analyses Dropping One Year At a Time From Analysis") 
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=0.19 12:28:07
+
+.         
+. 
+.         
+. /* TABLE S1. EFFECT OF MARKETPLACE PREMIUMS ON CHANGE IN VOTE SHARE */
+. sum voteshare_dem_change_16_12 voteshare_gop_change_16_12 voteshare_oth_change_16_12 turnout_change_16_12 prem_pctchange_14_17 pctic_change_0400_14_13 unemp_rate_cty_change_16_12
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+voteshare_.. |      9,333   -6.786003    4.955965  -23.44499   9.345703
+voteshare_.. |      9,333    3.830636     5.58455  -36.95011   23.31316
+voteshare_.. |      9,333    2.955367    2.534172   -14.6376   34.41102
+turnout_c~12 |      9,330    .8972396    2.683447  -23.85283   30.28203
+prem_pctc~17 |      8,072     36.7487    45.67637   -41.3199   191.7227
+-------------+---------------------------------------------------------
+pctic_cha~13 |      9,335   -4.188066     5.35954        -25       11.5
+unemp_ra~_12 |      9,333    -2.60929    1.800629  -9.400001        4.9
+r; t=0.01 12:28:08
+
+.         //Should all be in units [0,100]
+. eststo clear
+r; t=0.01 12:28:08
+
+. foreach y in voteshare_dem_change_16_12 voteshare_gop_change_16_12 voteshare_oth_change_16_12 turnout_change_16_12 {
+  2.         eststo: reghdfe `y' prem_pctchange_14_16_ffm pctic_change_0400_14_13 unemp_rate_cty_change_16_12 $controls [aweight=pop_total] if year==2016, absorb(year state) vce(robust)
+  3.         }
+(dropped 1 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =      3,107
+Absorbing 2 HDFE groups                           F(  13,   3045) =      83.91
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7507
+                                                  Adj R-squared   =     0.7457
+                                                  Within R-sq.    =     0.5831
+                                                  Root MSE        =     2.4970
+
+---------------------------------------------------------------------------------------------
+                            |               Robust
+ voteshare_dem_change_16_12 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------------+----------------------------------------------------------------
+   prem_pctchange_14_16_ffm |   -.020664   .0137838    -1.50   0.134    -.0476905    .0063625
+    pctic_change_0400_14_13 |   .0777319   .0484956     1.60   0.109    -.0173555    .1728193
+unemp_rate_cty_change_16_12 |   .6219907   .1074713     5.79   0.000      .411267    .8327144
+             unemp_rate_cty |  -.6376186   .1813991    -3.52   0.000    -.9932958   -.2819415
+         percent_in_poverty |   .0769194   .0511402     1.50   0.133    -.0233533    .1771922
+                 perc_black |   .1306529   .0128835    10.14   0.000     .1053917     .155914
+                perc_native |    .003252     .02783     0.12   0.907    -.0513155    .0578194
+                 perc_asian |  -.0000885   .0431712    -0.00   0.998    -.0847362    .0845592
+                  perc_hisp |   .0991073   .0113405     8.74   0.000     .0768716     .121343
+              median_income |    1.65177   .1946234     8.49   0.000     1.270163    2.033376
+  dem_campaign_spending_gap |  -.0005495    .001172    -0.47   0.639    -.0028475    .0017485
+    total_campaign_spending |  -.0000386   .0010056    -0.04   0.969    -.0020102    .0019331
+               pop_den_100k |    .114723   .0332409     3.45   0.001     .0495461    .1798999
+                      _cons |  -11.60235   1.975515    -5.87   0.000    -15.47583   -7.728875
+---------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+        year |         1           0           1     |
+       state |        49           1          48     |
+-----------------------------------------------------+
+(est1 stored)
+(dropped 1 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =      3,107
+Absorbing 2 HDFE groups                           F(  13,   3045) =      68.70
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.7608
+                                                  Adj R-squared   =     0.7560
+                                                  Within R-sq.    =     0.5399
+                                                  Root MSE        =     2.8535
+
+---------------------------------------------------------------------------------------------
+                            |               Robust
+ voteshare_gop_change_16_12 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------------+----------------------------------------------------------------
+   prem_pctchange_14_16_ffm |   .0116855   .0154081     0.76   0.448    -.0185259    .0418969
+    pctic_change_0400_14_13 |  -.1671854   .0581009    -2.88   0.004    -.2811064   -.0532644
+unemp_rate_cty_change_16_12 |  -.6835375    .125705    -5.44   0.000    -.9300128   -.4370623
+             unemp_rate_cty |   .7979468   .2173016     3.67   0.000     .3718742    1.224019
+         percent_in_poverty |   -.045542    .057641    -0.79   0.430    -.1585611    .0674771
+                 perc_black |  -.1306587   .0144836    -9.02   0.000    -.1590574   -.1022601
+                perc_native |  -.0208548   .0341886    -0.61   0.542    -.0878898    .0461802
+                 perc_asian |   .0436958   .0475479     0.92   0.358    -.0495334    .1369251
+                  perc_hisp |  -.1083419   .0129003    -8.40   0.000    -.1336362   -.0830477
+              median_income |  -1.826107   .2226951    -8.20   0.000    -2.262755   -1.389459
+  dem_campaign_spending_gap |   .0010264    .001443     0.71   0.477    -.0018028    .0038557
+    total_campaign_spending |   .0004735   .0012729     0.37   0.710    -.0020222    .0029693
+               pop_den_100k |  -.0938647   .0387111    -2.42   0.015    -.1697672   -.0179621
+                      _cons |   7.495438   2.212575     3.39   0.001     3.157147    11.83373
+---------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+        year |         1           0           1     |
+       state |        49           1          48     |
+-----------------------------------------------------+
+(est2 stored)
+(dropped 1 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =      3,107
+Absorbing 2 HDFE groups                           F(  13,   3045) =      14.05
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.8512
+                                                  Adj R-squared   =     0.8482
+                                                  Within R-sq.    =     0.1310
+                                                  Root MSE        =     1.0228
+
+---------------------------------------------------------------------------------------------
+                            |               Robust
+ voteshare_oth_change_16_12 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------------+----------------------------------------------------------------
+   prem_pctchange_14_16_ffm |   .0089785   .0033535     2.68   0.007     .0024031     .015554
+    pctic_change_0400_14_13 |   .0894535   .0224822     3.98   0.000     .0453717    .1335353
+unemp_rate_cty_change_16_12 |   .0615467   .0357066     1.72   0.085    -.0084648    .1315581
+             unemp_rate_cty |  -.1603282   .0425659    -3.77   0.000     -.243789   -.0768673
+         percent_in_poverty |  -.0313775   .0144694    -2.17   0.030    -.0597483   -.0030067
+                 perc_black |   5.90e-06   .0031494     0.00   0.999    -.0061692     .006181
+                perc_native |   .0176028   .0111075     1.58   0.113     -.004176    .0393817
+                 perc_asian |  -.0436073   .0096779    -4.51   0.000    -.0625833   -.0246314
+                  perc_hisp |   .0092347   .0032221     2.87   0.004     .0029169    .0155524
+              median_income |   .1743375    .066499     2.62   0.009       .04395    .3047249
+  dem_campaign_spending_gap |  -.0004769   .0004922    -0.97   0.333     -.001442    .0004882
+    total_campaign_spending |   -.000435   .0004595    -0.95   0.344    -.0013359     .000466
+               pop_den_100k |  -.0208584   .0117011    -1.78   0.075    -.0438012    .0020845
+                      _cons |   4.106916   .4912226     8.36   0.000     3.143755    5.070078
+---------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+        year |         1           0           1     |
+       state |        49           1          48     |
+-----------------------------------------------------+
+(est3 stored)
+(dropped 1 singleton observations)
+(MWFE estimator converged in 2 iterations)
+
+HDFE Linear regression                            Number of obs   =      3,107
+Absorbing 2 HDFE groups                           F(  13,   3045) =      16.79
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.4919
+                                                  Adj R-squared   =     0.4817
+                                                  Within R-sq.    =     0.2131
+                                                  Root MSE        =     1.9472
+
+---------------------------------------------------------------------------------------------
+                            |               Robust
+       turnout_change_16_12 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------------+----------------------------------------------------------------
+   prem_pctchange_14_16_ffm |  -.0131235   .0150177    -0.87   0.382    -.0425693    .0163222
+    pctic_change_0400_14_13 |   .0346981   .0412732     0.84   0.401     -.046228    .1156241
+unemp_rate_cty_change_16_12 |  -.2227206   .0757706    -2.94   0.003    -.3712872    -.074154
+             unemp_rate_cty |   .2984013   .0703127     4.24   0.000     .1605361    .4362664
+         percent_in_poverty |   .0879588   .0361151     2.44   0.015     .0171465    .1587712
+                 perc_black |  -.0924541   .0085508   -10.81   0.000      -.10922   -.0756882
+                perc_native |  -.0513483   .0184835    -2.78   0.006    -.0875897   -.0151069
+                 perc_asian |   .0041262   .0354624     0.12   0.907    -.0654065    .0736589
+                  perc_hisp |  -.0063858   .0096543    -0.66   0.508    -.0253154    .0125438
+              median_income |   .4748411     .19453     2.44   0.015     .0934176    .8562645
+  dem_campaign_spending_gap |   .0030114   .0011904     2.53   0.011     .0006773    .0053455
+    total_campaign_spending |   .0027755   .0011615     2.39   0.017      .000498     .005053
+               pop_den_100k |  -.0212765   .0357938    -0.59   0.552     -.091459     .048906
+                      _cons |  -3.733636   1.588118    -2.35   0.019    -6.847528   -.6197453
+---------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+        year |         1           0           1     |
+       state |        49           1          48     |
+-----------------------------------------------------+
+(est4 stored)
+r; t=0.38 12:28:08
+
+. esttab using "$table_results_path/analysis_panel_full.rtf", append ///
+>         keep(prem_pctchange_14_16_ffm pctic_change_0400_14_13 unemp_rate_cty_change_16_12 $controls)  ///
+>         onecell label compress nonumbers b(3) se(3) ar(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>         mlabel("Democrat Vote Share" "GOP Vote Share" "Other Party Vote Share" "Voter Turnout" ) ///
+>         title("Table S1. Effect of Change in Marketplace Premiums on CHANGE in vote share")
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/analysis_panel_full.rtf)
+r; t=0.11 12:28:08
+
+. 
+. 
+. /* FIGURE S1 AND S2 */
+. // Explore Non-Linearity and compare this to Medicaid expansion implications
+.         reghdfe voteshare_dem c.pctic_0400##c.pctic_0400 $controls [aweight=pop_total], absorb(year combined_fips) vce(cluster state)
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  12,     49) =      58.72
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9789
+                                                  Adj R-squared   =     0.9683
+                                                  Within R-sq.    =     0.3816
+Number of clusters (state)   =         50         Root MSE        =     2.8581
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |    2.31473   .2693971     8.59   0.000     1.773356    2.856103
+                          |
+c.pctic_0400#c.pctic_0400 |  -.0142353   .0018449    -7.72   0.000    -.0179428   -.0105278
+                          |
+           unemp_rate_cty |   .3315365   .1729468     1.92   0.061    -.0160131     .679086
+       percent_in_poverty |   .2125178   .0511754     4.15   0.000     .1096771    .3153586
+               perc_black |   .5251467   .2666469     1.97   0.055    -.0107004    1.060994
+              perc_native |  -3.956678   1.139397    -3.47   0.001    -6.246383   -1.666974
+               perc_asian |   2.217156   .3049212     7.27   0.000     1.604394    2.829918
+                perc_hisp |    .580906   .2023786     2.87   0.006      .174211     .987601
+            median_income |   2.021416   .4346995     4.65   0.000     1.147855    2.894977
+dem_campaign_spending_gap |  -.0000679   .0006465    -0.10   0.917     -.001367    .0012312
+  total_campaign_spending |  -.0002726   .0006741    -0.40   0.688    -.0016272    .0010819
+             pop_den_100k |   3.807802   .8634971     4.41   0.000     2.072539    5.543064
+                    _cons |  -88.75306   13.36624    -6.64   0.000    -115.6135   -61.89261
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.15 12:28:08
+
+. 
+.         g x = 0 in 1
+(12,522 missing values generated)
+r; t=0.00 12:28:08
+
+.         forvalues x = 1(1)100 {
+  2.                 replace x = `x' in `x'
+  3.         }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+r; t=0.00 12:28:08
+
+.                 g y_quad = _b[pctic_0400]*x + _b[c.pctic_0400#c.pctic_0400]*x*x
+(12,423 missing values generated)
+r; t=0.00 12:28:08
+
+.                 
+.         reghdfe voteshare_dem  pctic_0400 $controls [aweight=pop_total], absorb(year combined_fips) vce(cluster state)
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =      22.51
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9753
+                                                  Adj R-squared   =     0.9629
+                                                  Within R-sq.    =     0.2765
+Number of clusters (state)   =         50         Root MSE        =     3.0912
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2524102   .0965094     2.62   0.012     .0584674    .4463531
+           unemp_rate_cty |   .4266869   .2302504     1.85   0.070    -.0360185    .8893924
+       percent_in_poverty |  -.0198312   .1014034    -0.20   0.846     -.223609    .1839466
+               perc_black |   .5198229   .3318642     1.57   0.124    -.1470831    1.186729
+              perc_native |   -4.37744   1.511846    -2.90   0.006    -7.415608   -1.339271
+               perc_asian |   2.312632   .3297562     7.01   0.000     1.649962    2.975302
+                perc_hisp |   1.090177   .2138711     5.10   0.000      .660387    1.519967
+            median_income |   .9800339   .5009013     1.96   0.056     -.026565    1.986633
+dem_campaign_spending_gap |  -.0009095   .0009341    -0.97   0.335    -.0027868    .0009677
+  total_campaign_spending |   .0001779   .0009758     0.18   0.856    -.0017831    .0021388
+             pop_den_100k |   4.490612   1.588535     2.83   0.007     1.298331    7.682894
+                    _cons |  -16.48543   7.998728    -2.06   0.045    -32.55947   -.4113832
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.14 12:28:08
+
+.                 
+.                 g y_lin = _b[pctic_0400]*x 
+(12,423 missing values generated)
+r; t=0.00 12:28:08
+
+.         
+.         gen y_quad_label = ""
+(12,523 missing values generated)
+r; t=0.00 12:28:08
+
+.         replace y_quad_label = "Quadratic Model" if x ==100
+variable y_quad_label was str1 now str15
+(1 real change made)
+r; t=0.00 12:28:08
+
+.         gen y_lin_label = ""
+(12,523 missing values generated)
+r; t=0.00 12:28:08
+
+.         replace y_lin_label = "Linear Model" if x ==100
+variable y_lin_label was str1 now str12
+(1 real change made)
+r; t=0.00 12:28:08
+
+.         
+.         twoway ///
+>         (connected y_quad x, lpattern("_") color(sea) msymbol(none) mlabel(y_quad_label) mlabcolor(sea))  ///
+>         (connected y_lin x,  color(vermillion) msymbol(none) mlabel(y_lin_label) mlabcolor(vermillion)) , ///
+>                 ylabel(,nogrid noticks) ///
+>                 xlabel(,nogrid noticks) ///
+>                 ytitle("") ///
+>                 graphregion(margin(r+22)) ///
+>                 legend(off) ///
+>                 xtitle("Percent Change in Insurance Rate (Among those 0-400% of FPL), [0-100]", size(3)) ///
+>                 subtitle("Estimated Effect on Change in Democratic Vote Share, [0-100]", pos(11) size(3))
+r; t=1.76 12:28:10
+
+. 
+. save "$temp_path/temp_data.dta", replace
+file /Users/hollinal/Dropbox/elections_and_insurance/temp/temp_data.dta saved
+r; t=0.01 12:28:10
+
+. 
+. // Figure out who gained the most and compare them to who gained the least
+. sort combined_fips year
+r; t=0.01 12:28:10
+
+. bysort combined_fips: gen gain_in_ins = pctic_0400-pctic_0400[_n-1]
+(6,300 missing values generated)
+r; t=0.00 12:28:10
+
+. 
+. xtile gain_in_ins_5 = gain_in_ins if year==2016, n(3)
+r; t=0.02 12:28:10
+
+. tab gain_in_ins_5, gen(gain_in_ins_q_)
+
+3 quantiles |
+         of |
+gain_in_ins |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |      1,062       34.14       34.14
+          2 |      1,042       33.49       67.63
+          3 |      1,007       32.37      100.00
+------------+-----------------------------------
+      Total |      3,111      100.00
+r; t=0.00 12:28:10
+
+. bysort combined_fips: egen high_insurance = mean(gain_in_ins_q_3)
+(79 missing values generated)
+r; t=0.01 12:28:10
+
+. bysort combined_fips: egen low_insurance = mean(gain_in_ins_q_1)
+(79 missing values generated)
+r; t=0.01 12:28:10
+
+. gen high_low = . 
+(12,523 missing values generated)
+r; t=0.00 12:28:10
+
+. replace high_low = 0 if low_insurance==1
+(4,248 real changes made)
+r; t=0.00 12:28:10
+
+. replace high_low = 1 if high_insurance==1
+(4,028 real changes made)
+r; t=0.00 12:28:10
+
+. 
+. reghdfe voteshare_dem pctic_0400 c.pctic_0400#ib0.high_insurance   $controls [aweight=pop_total], absorb(year combined_fips) vce(cluster state)         
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  12,     49) =      23.09
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9753
+                                                  Adj R-squared   =     0.9629
+                                                  Within R-sq.    =     0.2766
+Number of clusters (state)   =         50         Root MSE        =     3.0913
+
+                                                (Std. Err. adjusted for 50 clusters in state)
+---------------------------------------------------------------------------------------------
+                            |               Robust
+              voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+----------------------------+----------------------------------------------------------------
+                 pctic_0400 |    .269698   .1074401     2.51   0.015      .053789     .485607
+                            |
+high_insurance#c.pctic_0400 |
+                         1  |   -.012509   .0534893    -0.23   0.816    -.1199998    .0949817
+                            |
+             unemp_rate_cty |   .4234836   .2260653     1.87   0.067    -.0308116    .8777788
+         percent_in_poverty |  -.0192679   .0993952    -0.19   0.847      -.21901    .1804741
+                 perc_black |    .519071   .3314426     1.57   0.124    -.1469878     1.18513
+                perc_native |  -4.371846   1.507604    -2.90   0.006    -7.401489   -1.342202
+                 perc_asian |   2.322151   .3415813     6.80   0.000     1.635718    3.008584
+                  perc_hisp |   1.093225   .2185738     5.00   0.000      .653985    1.532466
+              median_income |   .9788681   .5015178     1.95   0.057    -.0289696    1.986706
+  dem_campaign_spending_gap |  -.0009024    .000914    -0.99   0.328    -.0027391    .0009344
+    total_campaign_spending |   .0001616    .000942     0.17   0.865    -.0017314    .0020545
+               pop_den_100k |   4.462972   1.580018     2.82   0.007     1.287808    7.638137
+                      _cons |  -17.38474   8.825786    -1.97   0.055    -35.12082    .3513377
+---------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.19 12:28:10
+
+. 
+. collapse (mean) voteshare_dem  if year>2005 [aweight=pop_total], by(year high_insurance low_insurance high_low)
+r; t=0.03 12:28:10
+
+. gen diff  = voteshare_dem-voteshare_dem[_n-1]
+(1 missing value generated)
+r; t=0.00 12:28:10
+
+. gen diff2  = voteshare_dem-voteshare_dem[_n-2]
+(2 missing values generated)
+r; t=0.00 12:28:10
+
+. 
+. 
+. 
+. twoway ///
+>         connected diff2 year if high_insurance==1, ///
+>         yline(0) ///
+>         xla(2008 "2008" 2012 "2012" 2016 "2016", nogrid notick) ///
+>         yla(, nogrid notick) ///
+>         xtitle("Election Year") ///
+>         ytitle("Percentage point difference") ///
+>         title("Difference in democratic vote share between counties that gained the" "most insurance from 2012 to 2016 and" " " "{bf:A.}", pos(11) size(4)) ///
+>         subtitle("All other counties") 
+r; t=1.47 12:28:12
+
+.         
+.         graph export  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/dem_diff_by_county_insurance_gain_in_2016.pdf written in PDF format)
+r; t=0.03 12:28:12
+
+.         graph save  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/dem_diff_by_county_insurance_gain_in_2016.gph saved)
+r; t=0.07 12:28:12
+
+.         
+. twoway ///
+>         connected diff year if high_low==1, ///
+>         yline(0) ///
+>         xla(2008 "2008" 2012 "2012" 2016 "2016", nogrid notick) ///
+>         yla(, nogrid notick) ///
+>         xtitle("Election Year") ///
+>         ytitle("Percentage point difference") ///
+>         title("{bf:B.}", pos(11) size(4)) ///   
+>         subtitle("Counties who gained the least") 
+r; t=1.51 12:28:14
+
+. 
+.         graph export  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/dem_diff_by_county_insurance_gain_in_2016_all.pdf written in PDF format)
+r; t=0.03 12:28:14
+
+.         graph save  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/dem_diff_by_county_insurance_gain_in_2016_all.gph saved)
+r; t=0.06 12:28:14
+
+. 
+. // Make combined figure
+. graph combine ///
+>         "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.gph" ///
+>         "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.gph", ///
+>         col(1)  ysize(8) graphregion(margin(zero))
+r; t=2.97 12:28:17
+
+.                 
+. graph export "$figure_results_path/fig_s1.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_s1.pdf written in PDF format)
+r; t=0.04 12:28:17
+
+. graph export "$figure_results_path/fig_s1.tif", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_s1.tif written in TIFF format)
+r; t=0.07 12:28:17
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis1_panel_full.log
+  log type:  text
+ closed on:  23 Mar 2019, 12:28:17
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -47,26 +47,38 @@ use "$data_path/election_panel_2008_2016", clear
 
 		twoway (histogram pctic_0400 if expansion==1 & year==2012, color(sea)) ///
 			   (histogram pctic_0400 if expansion==0 & year==2012, fcolor(none) color(vermillion)), ///
-			 legend(order(1 "Expansion" 2 "Non-Expansion" ) pos(6) cols(2))	///
+			 legend(off)	///
 			 xlabel(40(10)100 ,nogrid notick) ///
 			 ylabel(0(.05).15 ,nogrid notick) ///
-			 title("Histogram of County % Insured in 2012 by Expansion Status") ///
-			 ytitle("") ///
-			 subtitle("Density", pos(11) size(3))
+			 title("Histogram of County % Insured by Expansion Status in:" " " "{bf:A.}", pos(11) size(4))  ///
+			 subtitle("2012") ///
+			 ytitle("Density") 
 			 
 			graph export  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.pdf", replace
+			graph save  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.gph", replace
 		
 		twoway (histogram pctic_0400 if expansion==1 & year==2016, color(sea)) ///
 			   (histogram pctic_0400 if expansion==0 & year==2016, fcolor(none) color(vermillion)), ///
-			 legend(order(1 "Expansion" 2 "Non-Expansion" ) pos(6) cols(2))	///
+			 legend(order(1 "Expansion" 2 "Non-Expansion" ) pos(6) cols(2) size(4))	///
 			 ylabel(0(.05).15 ,nogrid notick) ///
 			 xlabel(40(10)100 ,nogrid notick) ///
-			 title("Histogram of County % Insured in 2016 by Expansion Status") ///
-			 ytitle("") ///
-			 subtitle("Density", pos(11) size(3))
+			 title("{bf:B.}", pos(11) size(4)) /// ///
+			 subtitle("2016") ///			 
+			 ytitle("Density") 
 			 
-			graph export  "$figure_results_path/histogram_percent_insured_2016_by_expansion_status.pdf", replace
+			graph export  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.pdf", replace
+			graph save  "$figure_results_path/histogram_percent_insured_2016_by_expansion_status.gph", replace
 			
+		
+		// Make combined figure
+		graph combine ///
+			"$figure_results_path/histogram_percent_insured_2012_by_expansion_status.gph" ///
+			"$figure_results_path/histogram_percent_insured_2016_by_expansion_status.gph", ///
+			col(1)  ysize(7) graphregion(margin(zero))
+				
+		graph export "$figure_results_path/fig_1.pdf", replace
+		graph export "$figure_results_path/fig_1.tif", replace
+	
 		keep if year==2012 | year==2016
 		sort combined_fips year
 		bysort combined_fips: gen diff = pctic_0400[_n]-pctic_0400[_n-1]

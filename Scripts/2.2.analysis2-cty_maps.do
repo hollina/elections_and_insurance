@@ -90,19 +90,32 @@ use "$data_path/election_panel_2008_2016", clear
 	osize(thin ..)  ocolor(gs10  ..) ///
 	clmethod(custom) clbreaks(-10000000 -10 -5 -2.5 0 2.5 5 10 300) clnumber(8) ///
 	fcolor(	"178 24 43"	"214 96 77"	"244 165 130"	"253 219 199"	"209 229 240"	"146 197 222""67 147 195"	"33 102 172") ///
-	legend(label(2 "10+ percentage point [p.p] shift from Dem") label(3 "5 to 10 p.p. shift from Dem") label(4 "2.5 to 5 p.p. shift from Dem") label(5 "0 to 2.5 p.p. shift from Dem") label(6 "0 to 2.5 p.p. shift to Dem") label(7 "2.5 to 5 p.p. shift to Dem") label(8 "5 to 10 p.p shift to Dem") label(9 "10+ p.p. shift to Dem")     size(*1.25))
-	*title("Figure 1: County Level Changes in Party Vote Share from 2012 to 2016")
+	legend(off) ///
+	title("County Level Changes in Party Vote Share from:" " " "{bf:A.}", pos(11) size(4)) ///
+	subtitle("2008 to 2012") 
 	graph export "$figure_results_path/figure_1a_changes_in_vote_share_2008_to_2012_map.pdf", replace
+	graph save "$figure_results_path/figure_1a_changes_in_vote_share_2008_to_2012_map.gph", replace
 
 
 	spmap p_diff_dem using "$raw_data_path/map_shapefiles/us_county_corr.dta" if year==2016, id(id) ///
 	osize(thin ..)  ocolor(gs10  ..) ///
 	clmethod(custom) clbreaks(-10000000 -10 -5 -2.5 0 2.5 5 10 300) clnumber(8) ///
 	fcolor(	"178 24 43"	"214 96 77"	"244 165 130"	"253 219 199"	"209 229 240"	"146 197 222""67 147 195"	"33 102 172") ///
-	legend(label(2 "10+ percentage point [p.p] shift from Dem") label(3 "5 to 10 p.p. shift from Dem") label(4 "2.5 to 5 p.p. shift from Dem") label(5 "0 to 2.5 p.p. shift from Dem") label(6 "0 to 2.5 p.p. shift to Dem") label(7 "2.5 to 5 p.p. shift to Dem") label(8 "5 to 10 p.p shift to Dem") label(9 "10+ p.p. shift to Dem")     size(*1.25))
-	*title("Figure 1: County Level Changes in Party Vote Share from 2012 to 2016")
+	legend(label(2 "10+ percentage point [p.p] shift from Dem (D)") label(3 "5 to 10 p.p. shift from D") label(4 "2.5 to 5 p.p. shift from D") label(5 "0 to 2.5 p.p. shift from D") label(6 "0 to 2.5 p.p. shift to D") label(7 "2.5 to 5 p.p. shift to D") label(8 "5 to 10 p.p shift to D") label(9 "10+ p.p. shift D")     size(*1.25)) ///
+	title("{bf:B.}", pos(11) size(4)) ///
+	subtitle("2012 to 2016") 
 	graph export "$figure_results_path/figure_1b_changes_in_vote_share_2012_to_2016_map.pdf", replace
+	graph save "$figure_results_path/figure_1b_changes_in_vote_share_2012_to_2016_map.gph", replace
 
+
+// Make combined figure
+graph combine ///
+	"$figure_results_path/figure_1a_changes_in_vote_share_2008_to_2012_map.gph" ///
+	"$figure_results_path/figure_1b_changes_in_vote_share_2012_to_2016_map.gph", ///
+	col(1)  ysize(9) graphregion(margin(zero))
+		
+graph export "$figure_results_path/fig_2.pdf", replace
+graph export "$figure_results_path/fig_2.tif", replace
 
 log close
 

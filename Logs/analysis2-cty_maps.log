@@ -1,0 +1,299 @@
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis2-cty_
+> maps.log
+  log type:  text
+ opened on:  23 Mar 2019, 12:57:18
+r; t=0.00 12:57:18
+
+. di "The file is: `tag'"
+The file is:  analysis2-cty_maps.do AlexHolllingsworth 23-Mar-2019
+r; t=0.00 12:57:18
+
+. di "Task: `task' "
+Task: Create maps 
+r; t=0.00 12:57:18
+
+. di "Project: `project' "
+Project: ElectionACA 
+r; t=0.00 12:57:18
+
+. 
+. // Open dataset
+. use "$data_path/election_panel_2008_2016", clear
+r; t=0.00 12:57:18
+
+. 
+. // Merge in 2010 Census Variables
+.         rename state StateFIPS
+r; t=0.21 12:57:19
+
+.         rename county CountyFIPS
+r; t=0.00 12:57:19
+
+.         replace CountyFIPS=86 if StateFIPS ==12 & CountyFIPS==25 
+(0 real changes made)
+r; t=0.00 12:57:19
+
+.         
+. // XTSET
+.         xtset combined_fips year
+       panel variable:  combined_fips (unbalanced)
+        time variable:  year, 2004 to 2016, but with gaps
+                delta:  1 unit
+r; t=0.06 12:57:19
+
+. 
+. // Generate four year differences
+.         gen diff_tot=numb_total - L4.numb_total
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         gen diff_dem=numb_dem - L4.numb_dem
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         gen diff_gop=numb_gop - L4.numb_gop
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         gen diff_oth=numb_oth - L4.numb_oth
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         
+.         
+. // Label The Variables
+.         label variable diff_tot "Change in Total Votes Cast"
+r; t=0.00 12:57:19
+
+.         label variable diff_dem "Change in Democratic Votes"
+r; t=0.00 12:57:19
+
+.         label variable diff_gop "Change in Republican Votes"
+r; t=0.00 12:57:19
+
+.         label variable diff_oth "Change in Third Party Votes"
+r; t=0.00 12:57:19
+
+.         
+. // Generate four year percent differences
+.         gen p_diff_dem=voteshare_dem - L4.voteshare_dem
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         gen p_diff_gop=voteshare_gop - L4.voteshare_gop
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         gen p_diff_oth=voteshare_oth - L4.voteshare_oth
+(3,188 missing values generated)
+r; t=0.00 12:57:19
+
+.         
+. // Label The Variables
+.         label variable p_diff_dem "Percent Change in Democratic Votes"
+r; t=0.00 12:57:19
+
+.         label variable p_diff_gop "Percent Change in Republican Votes"
+r; t=0.00 12:57:19
+
+.         label variable p_diff_oth "Percent Change in Third Party Votes"
+r; t=0.00 12:57:19
+
+.         
+.         
+. // Prep Data for Map Making
+.         tostring StateFIPS, gen(STATEFPa)
+STATEFPa generated as str2
+r; t=0.02 12:57:19
+
+.         tostring CountyFIPS, gen(COUNTYFPa)
+COUNTYFPa generated as str3
+r; t=0.02 12:57:19
+
+.         gen STATEFP = string(real(STATEFPa),"%02.0f")
+r; t=0.01 12:57:19
+
+.         gen COUNTYFP = string(real(COUNTYFPa),"%03.0f")
+r; t=0.01 12:57:19
+
+. 
+. 
+. // Creaet CSV and DTA for Map
+.         outsheet using "$temp_path/cty_maps.csv", comma replace
+r; t=1.49 12:57:20
+
+.         save "$temp_path/cty_maps.dta", replace
+file /Users/hollinal/Dropbox/elections_and_insurance/temp/cty_maps.dta saved
+r; t=0.01 12:57:20
+
+. 
+. //Convert the shape file for the lower 48
+.         clear
+r; t=0.00 12:57:20
+
+.         
+. // Create usable data from NHGIS shapefile
+.         shp2dta using "$raw_data_path/map_shapefiles/US_county_2011", database
+> ("$raw_data_path/map_shapefiles/us_county_data") coordinates("$raw_data_path/m
+> ap_shapefiles/us_county_corr") genid(id) replace
+type: 5
+r; t=0.66 12:57:21
+
+. 
+. // Open data created by shp2dta program
+.         use "$raw_data_path/map_shapefiles/us_county_data", clear
+r; t=0.00 12:57:21
+
+. 
+. // Add Data for Mapping Back In
+.         *replace COUNTYFP="025" if COUNTYFP=="086" & STATEFP=="12"
+. 
+.         merge 1:m STATEFP COUNTYFP using "$temp_path/cty_maps.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         3,199
+        from master                         0  (_merge==1)
+        from using                      3,199  (_merge==2)
+
+    matched                             9,324  (_merge==3)
+    -----------------------------------------
+r; t=0.08 12:57:21
+
+. 
+.         keep if _merge==3
+(3,199 observations deleted)
+r; t=0.00 12:57:21
+
+.         drop _merge
+r; t=0.00 12:57:21
+
+.         
+.         
+. // Create Map of Vote Change in 2016
+.         sum p_diff_dem if year==2012, detail 
+
+             Percent Change in Democratic Votes
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -12.16333      -231.1609
+ 5%    -8.379837      -21.42937
+10%    -6.800417      -21.20954       Obs               3,108
+25%     -4.77544      -19.93681       Sum of Wgt.       3,108
+
+50%    -2.859319                      Mean          -3.116962
+                        Largest       Std. Dev.      5.231914
+75%    -1.021828       10.44967
+90%     .5525589       12.14553       Variance       27.37292
+95%     1.427399       32.76902       Skewness      -26.49208
+99%     3.068192       41.67591       Kurtosis       1165.187
+r; t=0.00 12:57:21
+
+.         sum p_diff_dem if year==2016, detail 
+
+             Percent Change in Democratic Votes
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%    -18.02973      -23.44499
+ 5%    -15.44278       -22.6848
+10%    -13.59142      -22.41224       Obs               3,107
+25%    -10.20802       -21.5153       Sum of Wgt.       3,107
+
+50%    -6.284063                      Mean          -6.782208
+                        Largest       Std. Dev.      4.958289
+75%    -3.346689       6.411217
+90%    -.8497734       6.673843       Variance       24.58463
+95%     .8530045       7.768845       Skewness      -.1802315
+99%     4.529598       9.345703       Kurtosis       2.812218
+r; t=0.00 12:57:21
+
+. 
+.         
+. // Using 8 Groups- Both Colors
+.         spmap p_diff_dem using "$raw_data_path/map_shapefiles/us_county_corr.d
+> ta" if year==2012, id(id) ///
+>         osize(thin ..)  ocolor(gs10  ..) ///
+>         clmethod(custom) clbreaks(-10000000 -10 -5 -2.5 0 2.5 5 10 300) clnumb
+> er(8) ///
+>         fcolor( "178 24 43"     "214 96 77"     "244 165 130"   "253 219 199" 
+>   "209 229 240"   "146 197 222""67 147 195"       "33 102 172") ///
+>         legend(off) ///
+>         title("County Level Changes in Party Vote Share from:" " " "{bf:A.}", 
+> pos(11) size(4)) ///
+>         subtitle("2008 to 2012") 
+r; t=4.02 12:57:25
+
+.         graph export "$figure_results_path/figure_1a_changes_in_vote_share_200
+> 8_to_2012_map.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/figure_1a_changes_
+> in_vote_share_2008_to_2012_map.pdf written in PDF format)
+r; t=1.35 12:57:26
+
+.         graph save "$figure_results_path/figure_1a_changes_in_vote_share_2008_
+> to_2012_map.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/figure_1a_changes_
+> in_vote_share_2008_to_2012_map.gph saved)
+r; t=0.15 12:57:27
+
+. 
+. 
+.         spmap p_diff_dem using "$raw_data_path/map_shapefiles/us_county_corr.d
+> ta" if year==2016, id(id) ///
+>         osize(thin ..)  ocolor(gs10  ..) ///
+>         clmethod(custom) clbreaks(-10000000 -10 -5 -2.5 0 2.5 5 10 300) clnumb
+> er(8) ///
+>         fcolor( "178 24 43"     "214 96 77"     "244 165 130"   "253 219 199" 
+>   "209 229 240"   "146 197 222""67 147 195"       "33 102 172") ///
+>         legend(label(2 "10+ percentage point [p.p] shift from Dem (D)") label(
+> 3 "5 to 10 p.p. shift from D") label(4 "2.5 to 5 p.p. shift from D") label(5 "
+> 0 to 2.5 p.p. shift from D") label(6 "0 to 2.5 p.p. shift to D") label(7 "2.5 
+> to 5 p.p. shift to D") label(8 "5 to 10 p.p shift to D") label(9 "10+ p.p. shi
+> ft D")     size(*1.25)) ///
+>         title("{bf:B.}", pos(11) size(4)) ///
+>         subtitle("2012 to 2016") 
+r; t=5.11 12:57:32
+
+.         graph export "$figure_results_path/figure_1b_changes_in_vote_share_201
+> 2_to_2016_map.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/figure_1b_changes_
+> in_vote_share_2012_to_2016_map.pdf written in PDF format)
+r; t=1.39 12:57:33
+
+.         graph save "$figure_results_path/figure_1b_changes_in_vote_share_2012_
+> to_2016_map.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/figure_1b_changes_
+> in_vote_share_2012_to_2016_map.gph saved)
+r; t=0.17 12:57:33
+
+. 
+. 
+. // Make combined figure
+. graph combine ///
+>         "$figure_results_path/figure_1a_changes_in_vote_share_2008_to_2012_map
+> .gph" ///
+>         "$figure_results_path/figure_1b_changes_in_vote_share_2012_to_2016_map
+> .gph", ///
+>         col(1)  ysize(9) graphregion(margin(zero))
+r; t=7.05 12:57:40
+
+.                 
+. graph export "$figure_results_path/fig_2.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_2.pdf written 
+> in PDF format)
+r; t=2.15 12:57:42
+
+. graph export "$figure_results_path/fig_2.tif", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_2.tif written 
+> in TIFF format)
+r; t=2.89 12:57:45
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis2-cty_
+> maps.log
+  log type:  text
+ closed on:  23 Mar 2019, 12:57:45
+--------------------------------------------------------------------------------

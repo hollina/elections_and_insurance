@@ -234,17 +234,8 @@ collapse (mean) voteshare_dem  if year>2005 [aweight=pop_total], by(year high_in
 gen diff  = voteshare_dem-voteshare_dem[_n-1]
 gen diff2  = voteshare_dem-voteshare_dem[_n-2]
 
-twoway ///
-	connected diff year if high_low==1, ///
-	yline(0) ///
-	xla(2008 "2008" 2012 "2012" 2016 "2016", nogrid notick) ///
-	yla(, nogrid notick) ///
-	xtitle("Election Year") ///
-	ytitle("Percentage point difference") ///
-	title("Difference in democratic vote share between counties that gained the most" "insurance from 2012 to 2016 and those who gained the least") 
-	
-	graph export  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.pdf", replace
-	
+
+
 twoway ///
 	connected diff2 year if high_insurance==1, ///
 	yline(0) ///
@@ -252,9 +243,33 @@ twoway ///
 	yla(, nogrid notick) ///
 	xtitle("Election Year") ///
 	ytitle("Percentage point difference") ///
-	title("Difference in democratic vote share between counties that gained the most" "insurance from 2012 to 2016 and all other counties") 
+	title("Difference in democratic vote share between counties that gained the" "most insurance from 2012 to 2016 and" " " "{bf:A.}", pos(11) size(4)) ///
+	subtitle("All other counties") 
 	
+	graph export  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.pdf", replace
+	graph save  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.gph", replace
+	
+twoway ///
+	connected diff year if high_low==1, ///
+	yline(0) ///
+	xla(2008 "2008" 2012 "2012" 2016 "2016", nogrid notick) ///
+	yla(, nogrid notick) ///
+	xtitle("Election Year") ///
+	ytitle("Percentage point difference") ///
+	title("{bf:B.}", pos(11) size(4)) ///	
+	subtitle("Counties who gained the least") 
+
 	graph export  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.pdf", replace
+	graph save  "$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.gph", replace
+
+// Make combined figure
+graph combine ///
+	"$figure_results_path/dem_diff_by_county_insurance_gain_in_2016.gph" ///
+	"$figure_results_path/dem_diff_by_county_insurance_gain_in_2016_all.gph", ///
+	col(1)  ysize(8) graphregion(margin(zero))
+		
+graph export "$figure_results_path/fig_s1.pdf", replace
+graph export "$figure_results_path/fig_s1.tif", replace
 
 log close
 	

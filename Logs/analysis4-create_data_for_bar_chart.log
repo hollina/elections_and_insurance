@@ -1,0 +1,236 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis4-create_data_for_bar_chart.log
+  log type:  text
+ opened on:  23 Mar 2019, 12:57:46
+r; t=0.00 12:57:46
+
+. di "The file is: `tag'"
+The file is:  analysis4-create_data_for_bar_chart.do AlexHolllingsworth 23-Mar-2019
+r; t=0.00 12:57:46
+
+. di "Task: `task' "
+Task: Analysis for 2008-16 county X year panel data 
+r; t=0.00 12:57:46
+
+. di "Project: `project' "
+Project: ElectionACA 
+r; t=0.00 12:57:46
+
+. 
+. //Open dataset
+. use "$data_path/election_panel_2008_2016", clear
+r; t=0.00 12:57:46
+
+. xtset combined_fips year
+       panel variable:  combined_fips (unbalanced)
+        time variable:  year, 2004 to 2016, but with gaps
+                delta:  1 unit
+r; t=0.30 12:57:46
+
+. sort combined_fips year
+r; t=0.00 12:57:46
+
+. 
+. 
+. reghdfe voteshare_gop pctic_0400 postexp $controlvars  [aweight=pop_total], absorb(year combined_fips) vce(cluster state)
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,332
+Absorbing 2 HDFE groups                           F(   2,     49) =       3.83
+Statistics robust to heteroskedasticity           Prob > F        =     0.0286
+                                                  R-squared       =     0.9472
+                                                  Adj R-squared   =     0.9207
+                                                  Within R-sq.    =     0.0398
+Number of clusters (state)   =         50         Root MSE        =     4.5485
+
+                                 (Std. Err. adjusted for 50 clusters in state)
+------------------------------------------------------------------------------
+             |               Robust
+voteshare_~p |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  pctic_0400 |  -.3554539    .142294    -2.50   0.016    -.6414044   -.0695033
+     postexp |   2.450886   1.277425     1.92   0.061    -.1161954    5.017968
+       _cons |   72.59891   10.61966     6.84   0.000     51.25792    93.93991
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3111        3111           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.38 12:57:46
+
+. 
+. 
+. bysort combined_fips: gen pctic_diff = pctic_0400[_n] - pctic_0400[_n -1]
+(6,300 missing values generated)
+r; t=0.00 12:57:46
+
+. 
+. bysort combined_fips: gen change_in_vote_share = voteshare_gop[_n] - voteshare_gop[_n -1]
+(3,188 missing values generated)
+r; t=0.00 12:57:46
+
+. gen vote_share_no_ins_chg  = voteshare_gop - (pctic_diff*_b[pctic] + _b[postexp]*postexp)
+(6,300 missing values generated)
+r; t=0.00 12:57:46
+
+. 
+. gen numb_gop_no_ins_chg = (vote_share_no_ins_chg*numb_total)/100
+(6,300 missing values generated)
+r; t=0.00 12:57:46
+
+. gen numb_pctic_0400 = (pctic_0400/100)*(pop_total*100000)
+(3,191 missing values generated)
+r; t=0.00 12:57:46
+
+. gen numb_pctic_138 = ( pctic_138/100)*(pop_total*100000)
+(3,191 missing values generated)
+r; t=0.00 12:57:46
+
+. collapse (sum) numb_gop_no_ins_chg numb_gop numb_dem numb_total numb_pctic_0400 numb_pctic_138  pop_total  (mean) expansion (lastnm) statename, by(state year)
+r; t=0.26 12:57:47
+
+. 
+. 
+. gen vote_share_dem = (numb_dem/numb_total)*100
+(4 missing values generated)
+r; t=0.00 12:57:47
+
+. 
+. 
+. gen vote_share_gop = (numb_gop/numb_total)*100
+(4 missing values generated)
+r; t=0.00 12:57:47
+
+. 
+. bysort state: gen change_share_gop = vote_share_gop[_n] - vote_share_gop[_n -1]
+(55 missing values generated)
+r; t=0.00 12:57:47
+
+. sort state year
+r; t=0.00 12:57:47
+
+. bysort state: gen change_share_dem = vote_share_dem[_n] - vote_share_dem[_n -1]
+(55 missing values generated)
+r; t=0.00 12:57:47
+
+. 
+. gen percent_0400 = (numb_pctic_0400/(pop_total*100000))*100
+(5 missing values generated)
+r; t=0.00 12:57:47
+
+. 
+. bysort state: gen change_ins = percent_0400[_n] - percent_0400[_n -1]
+(55 missing values generated)
+r; t=0.00 12:57:47
+
+. 
+. gen statename_spc = " " + statename
+r; t=0.00 12:57:47
+
+. 
+. reg change_share_dem change_ins [aweight = pop_total]  if year ==2016
+(sum of wgt is   3.2257e+03)
+
+      Source |       SS           df       MS      Number of obs   =        50
+-------------+----------------------------------   F(1, 48)        =      6.67
+       Model |  61.3839995         1  61.3839995   Prob > F        =    0.0129
+    Residual |  442.044401        48  9.20925835   R-squared       =    0.1219
+-------------+----------------------------------   Adj R-squared   =    0.1036
+       Total |    503.4284        49   10.274049   Root MSE        =    3.0347
+
+------------------------------------------------------------------------------
+change_sha~m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  change_ins |   .2763666    .107046     2.58   0.013     .0611363     .491597
+       _cons |  -5.532228   1.338086    -4.13   0.000    -8.222631   -2.841826
+------------------------------------------------------------------------------
+r; t=0.01 12:57:47
+
+. 
+. 
+. twoway scatter change_share_dem change_ins if year ==2016 & expansion == 0 [aweight = pop_total],msymbol(circle_hollow) mcolor(black) ///
+>  || scatter change_share_dem change_ins if year ==2016 & expansion > 0 [aweight = pop_total],msymbol(circle_hollow)  mcolor(turquoise) ///
+>  || lfit change_share_dem change_ins [aweight = pop_total]  if year ==2016, lcolor(vermillion) lwidth(.5)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="CA", mlabel(statename) mlabpos(0) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="TX", mlabel(statename) mlabpos(0) msymbol(none) /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="AZ", mlabel(statename) mlabpos(12)  mlabgap(2.5) msymbol(none) mlabcolor(turquoise)  /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="GA", mlabel(statename) mlabpos(12) mlabgap(3) msymbol(none) /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="VA", mlabel(statename) mlabpos(0) msymbol(none) /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="UT", mlabel(statename) mlabpos(12) mlabgap(1.5) msymbol(none) /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="DC", mlabel(statename) mlabpos(12) msymbol(none)  mlabcolor(turquoise)  /// 
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="MA", mlabel(statename) mlabpos(12) mlabgap(2.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="IA", mlabel(statename) mlabpos(12) mlabgap(2) msymbol(none)  mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="WV", mlabel(statename) mlabpos(12) mlabgap(2) msymbol(none)  mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="ND", mlabel(statename) mlabpos(9) mlabgap(1) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="HI", mlabel(statename) mlabpos(12) mlabgap(1.5) msymbol(none)  mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="SD", mlabel(statename) mlabpos(6) mlabgap(1) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="ME", mlabel(statename) mlabpos(9) mlabgap(1.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="VT", mlabel(statename) mlabpos(11) mlabgap(1.5) msymbol(none)  mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NE", mlabel(statename) mlabpos(11) mlabgap(1.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="KS", mlabel(statename) mlabpos(9) mlabgap(1.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="FL", mlabel(statename) mlabpos(11) mlabgap(3.75) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="IL", mlabel(statename) mlabpos(1) mlabgap(3) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="WA", mlabel(statename) mlabpos(3) mlabgap(2) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="AR", mlabel(statename) mlabpos(9) mlabgap(1.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="OR", mlabel(statename) mlabpos(3) mlabgap(1.5) msymbol(none) mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="CO", mlabel(statename) mlabpos(6) mlabgap(2) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NM", mlabel(statename) mlabpos(3) mlabgap(1.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NV", mlabel(statename) mlabpos(6) mlabgap(1.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="KY", mlabel(statename) mlabpos(3) mlabgap(1.5) msymbol(none) mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="MT", mlabel(statename) mlabpos(2) mlabgap(1) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="MI", mlabel(statename) mlabpos(6) mlabgap(2.5) msymbol(none) mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="OH", mlabel(statename) mlabpos(9) mlabgap(3) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="RI", mlabel(statename) mlabpos(3) mlabgap(1) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="IN", mlabel(statename) mlabpos(7) mlabgap(2.25) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="ID", mlabel(statename) mlabpos(1) mlabgap(1) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NH", mlabel(statename) mlabpos(3) mlabgap(1) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NY", mlabel(statename) mlabpos(11) mlabgap(3.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="MD", mlabel(statename) mlabpos(3) mlabgap(1.75) msymbol(none) mlabcolor(turquoise)  ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NC", mlabel(statename) mlabpos(11) mlabgap(2.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="LA", mlabel(statename) mlabpos(6) mlabgap(1.25) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="SC", mlabel(statename) mlabpos(4) mlabgap(.75) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="NJ", mlabel(statename) mlabpos(3) mlabgap(2.5) msymbol(none)  mlabcolor(turquoise) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="MO", mlabel(statename) mlabpos(6) mlabgap(1.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="WY", mlabel(statename) mlabpos(9) mlabgap(.5) msymbol(none) ///
+>  || scatter change_share_dem change_ins if year ==2016 & statename=="PA", mlabel(statename) mlabpos(5) mlabgap(2.5) msymbol(none)  mlabcolor(turquoise)  ///
+>  || , ylabel(-15(5)5, noticks nogrid labsize(4)) ///
+>         xlabel(, noticks nogrid) ///
+>         xtitle("Percentage Point Change in Insured Rate from 2012 to 2016", size(3)) ///
+>         ytitle("") ///
+>         legend(off) ///
+>         yscale(range(-15(5)5)) ///
+>         xscale(range(0(5)20)) ///
+>         xlabel(0(5)20, labsize(4)) ///
+>         subtitle("Percentage Point Change in Democratic Vote Share from 2012 to 2016", position(11) size(3)) ///
+>         yline(0, lcolor(reddish) lwidth(.15) )
+r; t=4.33 12:57:51
+
+.         *title("Exhibit 1: There is Positive Association Between Changes in Insurance" "Coverage and Changes Democratic Party Vote Share", position(11) size(4.5)) ///
+>         *note("Note: The size of each circle is proportional to state population. The dashed line represents a best fit line weighted" ///
+>         *"by population.")
+.         
+.         graph export "$figure_results_path/fig_3.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_3.pdf written in PDF format)
+r; t=0.13 12:57:51
+
+.         graph export "$figure_results_path/fig_3.png", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_3.png written in PNG format)
+r; t=0.19 12:57:51
+
+.         graph export "$figure_results_path/fig_3.tif", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_3.tif written in TIFF format)
+r; t=0.57 12:57:52
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis4-create_data_for_bar_chart.log
+  log type:  text
+ closed on:  23 Mar 2019, 12:57:52
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

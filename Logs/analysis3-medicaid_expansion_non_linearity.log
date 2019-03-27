@@ -1,0 +1,338 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis3-medicaid_expansion_non_linearity.log
+  log type:  text
+ opened on:  23 Mar 2019, 12:57:02
+r; t=0.00 12:57:02
+
+. di "The file is: `tag'"
+The file is:  analysis3-medicaid_expansion_non_linearity.do AlexHolllingsworth 23-Mar-2019
+r; t=0.00 12:57:02
+
+. di "Task: `task' "
+Task: Analysis for 2008-16 county X year panel data 
+r; t=0.00 12:57:02
+
+. di "Project: `project' "
+Project: ElectionACA 
+r; t=0.00 12:57:02
+
+. 
+. /* OPEN DATASET */
+. use "$data_path/election_panel_2008_2016", clear
+r; t=0.02 12:57:02
+
+. 
+. // Main Analysis 
+.         reghdfe voteshare_dem pctic_0400 $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state) 
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  11,     49) =      22.51
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9753
+                                                  Adj R-squared   =     0.9629
+                                                  Within R-sq.    =     0.2765
+Number of clusters (state)   =         50         Root MSE        =     3.0912
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .2524102   .0965094     2.62   0.012     .0584674    .4463531
+           unemp_rate_cty |   .4266869   .2302504     1.85   0.070    -.0360185    .8893924
+       percent_in_poverty |  -.0198312   .1014034    -0.20   0.846     -.223609    .1839466
+               perc_black |   .5198229   .3318642     1.57   0.124    -.1470831    1.186729
+              perc_native |   -4.37744   1.511846    -2.90   0.006    -7.415608   -1.339271
+               perc_asian |   2.312632   .3297562     7.01   0.000     1.649962    2.975302
+                perc_hisp |   1.090177   .2138711     5.10   0.000      .660387    1.519967
+            median_income |   .9800339   .5009013     1.96   0.056     -.026565    1.986633
+dem_campaign_spending_gap |  -.0009095   .0009341    -0.97   0.335    -.0027868    .0009677
+  total_campaign_spending |   .0001779   .0009758     0.18   0.856    -.0017831    .0021388
+             pop_den_100k |   4.490612   1.588535     2.83   0.007     1.298331    7.682894
+                    _cons |  -16.48543   7.998728    -2.06   0.045    -32.55947   -.4113832
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.63 12:57:02
+
+.                 est sto m1
+r; t=0.00 12:57:02
+
+. // Medicaid Expansion 
+.         reghdfe voteshare_dem c.pctic_0400 expansion post postexp $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state)
+note: expansion is probably collinear with the fixed effects (all values close to zero after partialling-out; tol = 1.0e-09)
+note: post is probably collinear with the fixed effects (all values close to zero after partialling-out; tol = 1.0e-09)
+(MWFE estimator converged in 4 iterations)
+note: expansion omitted because of collinearity
+note: post omitted because of collinearity
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  12,     49) =      34.90
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9770
+                                                  Adj R-squared   =     0.9655
+                                                  Within R-sq.    =     0.3261
+Number of clusters (state)   =         50         Root MSE        =     2.9835
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |    .387148   .1035664     3.74   0.000     .1790234    .5952725
+                expansion |          0  (omitted)
+                     post |          0  (omitted)
+                  postexp |  -3.276916   .8058505    -4.07   0.000    -4.896333   -1.657499
+           unemp_rate_cty |   .3663355   .2086379     1.76   0.085    -.0529381    .7856091
+       percent_in_poverty |   .1259678   .0661019     1.91   0.063    -.0068689    .2588045
+               perc_black |   .5048956   .2961588     1.70   0.095    -.0902579    1.100049
+              perc_native |  -3.972681   1.311676    -3.03   0.004    -6.608593   -1.336769
+               perc_asian |   2.463718   .3436876     7.17   0.000     1.773052    3.154384
+                perc_hisp |   .9932256   .2137759     4.65   0.000     .5636269    1.422824
+            median_income |   1.549438   .4836256     3.20   0.002     .5775559     2.52132
+dem_campaign_spending_gap |  -.0005203   .0007625    -0.68   0.498    -.0020526    .0010121
+  total_campaign_spending |  -.0004186   .0008192    -0.51   0.612    -.0020648    .0012276
+             pop_den_100k |   4.651994   1.307755     3.56   0.001     2.023961    7.280026
+                    _cons |  -30.67352   8.067437    -3.80   0.000    -46.88564   -14.46139
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.43 12:57:03
+
+.                 est sto m2
+r; t=0.00 12:57:03
+
+. 
+. // Binary for top quintile 
+.         xtile pctic_0400_5 = pctic_0400, n(5)
+r; t=0.04 12:57:03
+
+.         sumup pctic_0400_5 if year==2016, by(expansion)
+
+expansion |       Obs    Missing       Mean  Std. Dev.        Min        Max 
+----------+------------------------------------------------------------------
+    0     |       1642          0    3.44214    1.20506          1          5
+    1     |       1469          0    4.80667    .493206          2          5
+----------+------------------------------------------------------------------
+  Total   |       3111       9412    4.08647    1.15985          1          5
+-----------------------------------------------------------------------------
+r; t=0.02 12:57:03
+
+.                 //the average medicaid expansion quintile is in the 4th or 5th
+.         gen high_insurance = 0
+r; t=0.00 12:57:03
+
+.         replace high_insurance=1 if pctic_0400_5==5
+(1,841 real changes made)
+r; t=0.00 12:57:03
+
+.         label variable high_insurance "Indicator for Highest Ins. Quintile"
+r; t=0.00 12:57:03
+
+.         reghdfe voteshare_dem c.pctic_0400 high_insurance  $controls [aweight=pop_total] if year>=2008, absorb(year combined_fips) vce(cluster state)
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      9,327
+Absorbing 2 HDFE groups                           F(  12,     49) =      58.55
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9778
+                                                  Adj R-squared   =     0.9667
+                                                  Within R-sq.    =     0.3496
+Number of clusters (state)   =         50         Root MSE        =     2.9310
+
+                                              (Std. Err. adjusted for 50 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .3419447   .0751239     4.55   0.000     .1909776    .4929118
+           high_insurance |  -3.513003   .5219239    -6.73   0.000    -4.561849   -2.464158
+           unemp_rate_cty |   .4314018   .1940549     2.22   0.031     .0414338    .8213698
+       percent_in_poverty |   .0860607   .0743446     1.16   0.253    -.0633404    .2354618
+               perc_black |   .6023117   .2882006     2.09   0.042      .023151    1.181472
+              perc_native |  -4.349822   1.221863    -3.56   0.001    -6.805247   -1.894396
+               perc_asian |   2.275955   .3119573     7.30   0.000     1.649054    2.902857
+                perc_hisp |   .8025104   .1877559     4.27   0.000     .4252007     1.17982
+            median_income |   1.611503   .4430885     3.64   0.001     .7210829    2.501922
+dem_campaign_spending_gap |  -.0003969   .0007072    -0.56   0.577    -.0018182    .0010244
+  total_campaign_spending |   .0002113   .0007514     0.28   0.780    -.0012988    .0017213
+             pop_den_100k |   4.434315   1.034515     4.29   0.000     2.355378    6.513251
+                    _cons |  -23.61626   7.821275    -3.02   0.004     -39.3337   -7.898823
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      3109        3109           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.17 12:57:03
+
+.                 eststo m3
+r; t=0.00 12:57:03
+
+.                 
+.         reghdfe voteshare_dem c.pctic_0400 high_insurance  $controls [aweight=pop_total] if expansion==0&year>=2008, absorb(year combined_fips) vce(cluster state)
+(MWFE estimator converged in 4 iterations)
+
+HDFE Linear regression                            Number of obs   =      4,923
+Absorbing 2 HDFE groups                           F(  12,     18) =     515.04
+Statistics robust to heteroskedasticity           Prob > F        =     0.0000
+                                                  R-squared       =     0.9709
+                                                  Adj R-squared   =     0.9562
+                                                  Within R-sq.    =     0.3110
+Number of clusters (state)   =         19         Root MSE        =     3.2285
+
+                                              (Std. Err. adjusted for 19 clusters in state)
+-------------------------------------------------------------------------------------------
+                          |               Robust
+            voteshare_dem |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------------------+----------------------------------------------------------------
+               pctic_0400 |   .3489314   .0530183     6.58   0.000     .2375441    .4603188
+           high_insurance |   -2.03745   .7157445    -2.85   0.011    -3.541174   -.5337272
+           unemp_rate_cty |   1.014477    .221251     4.59   0.000     .5496461    1.479308
+       percent_in_poverty |  -.0898363   .0561929    -1.60   0.127    -.2078931    .0282206
+               perc_black |    .716547    .358576     2.00   0.061    -.0367932    1.469887
+              perc_native |  -5.749322   1.496279    -3.84   0.001    -8.892888   -2.605756
+               perc_asian |   1.890455   .6133459     3.08   0.006     .6018635    3.179047
+                perc_hisp |   .2301202   .2082567     1.10   0.284     -.207411    .6676513
+            median_income |   .6694188    .499111     1.34   0.197    -.3791745    1.718012
+dem_campaign_spending_gap |  -.0018681   .0017309    -1.08   0.295    -.0055045    .0017683
+  total_campaign_spending |   .0021306   .0019196     1.11   0.282    -.0019024    .0061637
+             pop_den_100k |   12.32048   3.813601     3.23   0.005     4.308406    20.33256
+                    _cons |  -12.46137   8.119005    -1.53   0.142    -29.51876    4.596031
+-------------------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-------------------------------------------------------+
+   Absorbed FE | Categories  - Redundant  = Num. Coefs |
+---------------+---------------------------------------|
+          year |         3           0           3     |
+ combined_fips |      1641        1641           0    *|
+-------------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+r; t=0.31 12:57:03
+
+.                 eststo m4
+r; t=0.00 12:57:03
+
+. 
+.         esttab m1 m2 m3 m4 using  "$table_results_path/medicaid_v_high_ins.rtf", label replace drop(expansion post) ///
+>                 onecell compress nonumbers b(2) se(2) ar2(3) star(* 0.10 ** 0.05 *** 0.01) ///
+>                 title("Table 5: Medicaid Expansion Effect is Same As the High Insurance Effect Implying Diminishing Returns") ///
+>                 mlabel("Baseline Model" "Allow for Medicaid Exp" "High Ins. Indicator" "High Ins. Indicator AND Drop Medicaid Exp States" )
+(output written to /Users/hollinal/Dropbox/elections_and_insurance/Tables/medicaid_v_high_ins.rtf)
+r; t=0.32 12:57:04
+
+. 
+.                 twoway (histogram pctic_0400 if expansion==1 & year==2012, color(sea)) ///
+>                            (histogram pctic_0400 if expansion==0 & year==2012, fcolor(none) color(vermillion)), ///
+>                          legend(off)    ///
+>                          xlabel(40(10)100 ,nogrid notick) ///
+>                          ylabel(0(.05).15 ,nogrid notick) ///
+>                          title("Histogram of County % Insured by Expansion Status in:" " " "{bf:A.}", pos(11) size(4))  ///
+>                          subtitle("2012") ///
+>                          ytitle("Density") 
+r; t=2.85 12:57:06
+
+.                          
+.                         graph export  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/histogram_percent_insured_2012_by_expansion_status.pdf written in PDF format)
+r; t=2.61 12:57:09
+
+.                         graph save  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/histogram_percent_insured_2012_by_expansion_status.gph saved)
+r; t=0.54 12:57:10
+
+.                 
+.                 twoway (histogram pctic_0400 if expansion==1 & year==2016, color(sea)) ///
+>                            (histogram pctic_0400 if expansion==0 & year==2016, fcolor(none) color(vermillion)), ///
+>                          legend(order(1 "Expansion" 2 "Non-Expansion" ) pos(6) cols(2) size(4)) ///
+>                          ylabel(0(.05).15 ,nogrid notick) ///
+>                          xlabel(40(10)100 ,nogrid notick) ///
+>                          title("{bf:B.}", pos(11) size(4)) /// ///
+>                          subtitle("2016") ///                    
+>                          ytitle("Density") 
+r; t=2.08 12:57:12
+
+.                          
+.                         graph export  "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/histogram_percent_insured_2012_by_expansion_status.pdf written in PDF format)
+r; t=0.06 12:57:12
+
+.                         graph save  "$figure_results_path/histogram_percent_insured_2016_by_expansion_status.gph", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/histogram_percent_insured_2016_by_expansion_status.gph saved)
+r; t=0.08 12:57:12
+
+.                         
+.                 
+.                 // Make combined figure
+.                 graph combine ///
+>                         "$figure_results_path/histogram_percent_insured_2012_by_expansion_status.gph" ///
+>                         "$figure_results_path/histogram_percent_insured_2016_by_expansion_status.gph", ///
+>                         col(1)  ysize(7) graphregion(margin(zero))
+r; t=4.20 12:57:16
+
+.                                 
+.                 graph export "$figure_results_path/fig_1.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_1.pdf written in PDF format)
+r; t=0.10 12:57:16
+
+.                 graph export "$figure_results_path/fig_1.tif", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/fig_1.tif written in TIFF format)
+r; t=0.20 12:57:16
+
+.         
+.                 keep if year==2012 | year==2016
+(6,300 observations deleted)
+r; t=0.00 12:57:16
+
+.                 sort combined_fips year
+r; t=0.00 12:57:16
+
+.                 bysort combined_fips: gen diff = pctic_0400[_n]-pctic_0400[_n-1]
+(3,112 missing values generated)
+r; t=0.00 12:57:16
+
+.                 
+.                 twoway (histogram diff if expansion==1 & year==2016, color(sea)) ///
+>                            (histogram diff if expansion==0 & year==2016, fcolor(none) color(vermillion)), ///
+>                          legend(order(1 "Expansion" 2 "Non-Expansion" ) pos(6) cols(2)) ///
+>                          ylabel(0(.05).2 ,nogrid notick) ///
+>                          xlabel( ,nogrid notick) ///
+>                          title("Histogram of Difference in County % Insured from 2012 to 2016 by Expansion Status") ///
+>                          ytitle("") ///
+>                          xtitle("") ///
+>                          subtitle("Density", pos(11) size(3))
+r; t=1.71 12:57:18
+
+.                          
+.                         graph export  "$figure_results_path/histogram_diff_percent_insured_2012_2016_by_expansion_status.pdf", replace
+(file /Users/hollinal/Dropbox/elections_and_insurance/Figures/histogram_diff_percent_insured_2012_2016_by_expansion_status.pdf written in PDF format)
+r; t=0.07 12:57:18
+
+.                  
+. log close
+      name:  <unnamed>
+       log:  /Users/hollinal/Dropbox/elections_and_insurance/Logs/analysis3-medicaid_expansion_non_linearity.log
+  log type:  text
+ closed on:  23 Mar 2019, 12:57:18
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

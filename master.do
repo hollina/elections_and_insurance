@@ -115,7 +115,7 @@ matrix drop _all
 
 ////////////////////////////////////////////////////////////////////////
 /* DATASET CONSTRCUTION */
-
+/*
 // Build intermediate files
 do "$script_path/1.1.0.create_election_data_2008_2016.do"
 do "$script_path/1.2.0.create_sahie_data.do"
@@ -127,7 +127,7 @@ do "$script_path/1.7.0.create_campaign_spending.do"
 
 // Combine files into a panel dataset
 do "$script_path/1.8.0.create_election_panel.do"
-
+*/
 ////////////////////////////////////////////////////////////////////////
 /* DATA ANALYSIS */
 
